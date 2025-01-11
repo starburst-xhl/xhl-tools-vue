@@ -32,9 +32,8 @@ watch(route, () => {
 
 <template>
   <div class="head-bar__container">
-    <div>
-      <div class="logo">
-      </div>
+    <div class="head-bar__left-container">
+      <img src="@/assets/logo.jpg" alt="Logo" width="48">
       <a-menu
         v-model:selected-keys="currentItem"
         theme="dark"
@@ -60,6 +59,12 @@ watch(route, () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.head-bar__left-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .head-bar__button-container {
