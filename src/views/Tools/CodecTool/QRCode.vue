@@ -9,7 +9,7 @@
       </a-form-item>
     </a-form>
     <a-qrcode :value="text" ref="qrcodeCanvasRef" :error-level="level" :size="192"/>
-    <a-button type="primary" @click="downloadChange" size="large">下载</a-button>
+    <a-button type="primary" @click="downloadChange">下载</a-button>
   </div>
 </template>
 <script lang="ts" setup>
@@ -22,7 +22,7 @@ const segmentedData = ['L', 'M', 'Q', 'H'];
 const level = ref(segmentedData[0]);
 
 const downloadChange = async () => {
-  const url = await qrcodeCanvasRef.value.toDataURL();
+  const url = qrcodeCanvasRef.value.toDataURL();
   const a = document.createElement('a');
   a.download = 'QRCode.png';
   a.href = url;

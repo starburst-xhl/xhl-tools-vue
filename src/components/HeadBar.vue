@@ -36,7 +36,6 @@ watch(route, () => {
       <img src="@/assets/logo.jpg" alt="Logo" width="48">
       <a-menu
         v-model:selected-keys="currentItem"
-        theme="dark"
         mode="horizontal"
         :style="{ lineHeight: '64px' }"
         @click="handleMenuSelect"
@@ -45,9 +44,9 @@ watch(route, () => {
       </a-menu>
     </div>
     <div class="head-bar__button-container">
-      <a-tooltip title="Github" color="lime">
+      <a-tooltip title="Github">
         <a-button type="text" href="https://github.com/starburst-xhl/xhl-tools-vue" target="_blank">
-          <GithubOutlined style="color: white"/>
+          <GithubOutlined/>
         </a-button>
       </a-tooltip>
     </div>
