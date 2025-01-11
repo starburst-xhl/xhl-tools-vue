@@ -60,7 +60,13 @@ const router = createRouter({
                   name: 'StopwatchTool',
                   component: () => import('@/views/Tools/NumberTool/StopwatchTool.vue'),
                   meta: {title: '秒表'}
-                }
+                },
+                {
+                  path: 'password-generator',
+                  name: 'PasswordGenerator',
+                  component: () => import('@/views/Tools/NumberTool/PasswordGenerator.vue'),
+                  meta: {title: '密码生成器'}
+                },
               ]
             },
             {

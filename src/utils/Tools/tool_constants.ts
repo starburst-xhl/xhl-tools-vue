@@ -4,6 +4,7 @@ export enum ToolType {
   'RpgmvpToPng' = 'rpgmvp-to-png',
   'StopwatchTool' = 'stopwatch-tool',
   'AesTool' = 'aes-tool',
+  'PasswordGenerator' = 'password-generator',
 }
 
 export interface ToolMetaData {
@@ -38,5 +39,10 @@ export const ToolMetaDataMap: Record<ToolType, ToolMetaData> = {
     title: 'AES工具',
     description: 'AES工具',
     pathName: 'AesTool',
+  },
+  [ToolType.PasswordGenerator]: {
+    title: '密码生成器',
+    description: '密码生成器',
+    pathName: 'PasswordGenerator',
   },
 };
