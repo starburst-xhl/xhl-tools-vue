@@ -3,6 +3,7 @@ import {computed, ref, watch} from "vue";
 import {type RouteRecordRaw, useRoute} from "vue-router";
 import router from "@/router";
 import {badString} from "@/utils/string_utils.ts";
+import {GithubOutlined} from "@ant-design/icons-vue";
 
 defineProps<{
   routes: RouteRecordRaw[];
@@ -30,21 +31,42 @@ watch(route, () => {
 </script>
 
 <template>
-  <div>
-    <div class="logo">
+  <div class="head-bar__container">
+    <div>
+      <div class="logo">
+      </div>
+      <a-menu
+        v-model:selected-keys="currentItem"
+        theme="dark"
+        mode="horizontal"
+        :style="{ lineHeight: '64px' }"
+        @click="handleMenuSelect"
+      >
+        <a-menu-item v-for="route in routes" :key="route.name">{{ route.meta?.title ?? '-' }}</a-menu-item>
+      </a-menu>
     </div>
-    <a-menu
-      v-model:selected-keys="currentItem"
-      theme="dark"
-      mode="horizontal"
-      :style="{ lineHeight: '64px' }"
-      @click="handleMenuSelect"
-    >
-      <a-menu-item v-for="route in routes" :key="route.name">{{ route.meta?.title ?? '-' }}</a-menu-item>
-    </a-menu>
+    <div class="head-bar__button-container">
+      <a-tooltip title="Github" color="lime">
+        <a-button type="text" href="https://github.com/starburst-xhl/xhl-tools-vue" target="_blank">
+          <GithubOutlined style="color: white"/>
+        </a-button>
+      </a-tooltip>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.head-bar__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.head-bar__button-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
 </style>
