@@ -36,6 +36,10 @@ const key = ref('');
 const keyLength = ref('128');
 
 const encrypt = () => {
+  if (!decryptedContent.value) {
+    encryptedContent.value = '';
+    return;
+  }
   encryptedContent.value = AES.encrypt(decryptedContent.value, enc.Utf8.parse(key.value), {
     mode: mode.ECB,
     padding: pad.Pkcs7,
@@ -43,6 +47,10 @@ const encrypt = () => {
 };
 
 const decrypt = () => {
+  if (!encryptedContent.value) {
+    decryptedContent.value = '';
+    return;
+  }
   decryptedContent.value = AES.decrypt(encryptedContent.value, enc.Utf8.parse(key.value), {
     mode: mode.ECB,
     padding: pad.Pkcs7,
