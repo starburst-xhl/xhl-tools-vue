@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref, watch} from "vue";
+import {computed, onMounted, reactive, ref, watch} from "vue";
 import {message} from "ant-design-vue";
 import {badString} from "@/utils/string_utils.ts";
 import {CopyOutlined, RedoOutlined} from "@ant-design/icons-vue";
+
+const clipboard = computed(() => {
+  return navigator.clipboard;
+});
 
 const form = reactive({
   passwordLength: 12,
@@ -80,7 +84,7 @@ onMounted(() => {
               <RedoOutlined/>
             </template>
           </a-button>
-          <a-button type="primary" shape="round" @click="() => {navigator.clipboard.writeText(password)}">
+          <a-button type="primary" shape="round" @click="() => {clipboard.writeText(password)}">
             <template #icon>
               <CopyOutlined/>
             </template>

@@ -16,7 +16,10 @@ function initItems() {
   const currentSecondLevelRoute = matchedRecords.length > 1 ? matchedRecords[1] : null;
   if (currentSecondLevelRoute) {
     items.value = routeToMenuItems(currentSecondLevelRoute.children);
-    selectedKeys.value.push(matchedRecords[matchedRecords.length - 1].name);
+    const lastName = matchedRecords[matchedRecords.length - 1].name;
+    if (typeof lastName === 'string') {
+      selectedKeys.value.push(lastName);
+    }
   }
 }
 
