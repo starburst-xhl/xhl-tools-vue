@@ -1,5 +1,5 @@
 {
-  "name": "vue-test",
+  "name": "xhl-tools-vue",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -10,7 +10,8 @@
     "test:unit": "vitest",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@types/crypto-js": "^4.2.2",
