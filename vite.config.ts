@@ -7,6 +7,8 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // GitHub Pages 仓库名作为 base 路径
+  base: '/xhl-tools-vue/',
   plugins: [
     vue(),
     vueJsx(),

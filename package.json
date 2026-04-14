@@ -8,10 +8,10 @@
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "test:unit": "vitest",
-    "build-only": "vite build",
+    "build-only": "vite build && node -e \"require('fs').writeFileSync('dist/.nojekyll', '')\"",
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist --dotfiles"
   },
   "dependencies": {
     "@types/crypto-js": "^4.2.2",
