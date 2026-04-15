@@ -1,0 +1,1 @@
+import{_ as o,a as t,h as s,o as n}from"./app-BhGoNpZP.js";const r={},c={style:{height:"300px"}};function a(l,e){return n(),t("div",c,[...e[0]||(e[0]=[s("h1",null,"Welcome to tool home",-1)])])}const m=o(r,[["render",a]]);export{m as default};
