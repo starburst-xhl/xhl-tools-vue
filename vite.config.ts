@@ -1,3 +1,4 @@
+/// <reference types="vite-ssg" />
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
@@ -12,11 +13,18 @@ export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
-    vueDevTools(),
-  ],
+    // 仅在开发环境启用 devtools
+    process.env.NODE_ENV === 'development' ? vueDevTools() : null,
+  ].filter(Boolean),
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
+  },
+  ssgOptions: {
+    formatting: 'minify',
+  },
+  ssr: {
+    noExternal: ['ant-design-vue', '@ant-design/icons-vue', '@ant-design/icons-svg', 'crypto-js'],
   },
 })

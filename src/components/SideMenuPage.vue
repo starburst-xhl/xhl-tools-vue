@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import router from "@/router";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import type {MenuItemType} from "ant-design-vue/es/menu/src/interface";
 import {routeToMenuItems} from "@/utils/menu_utils.ts";
+
+const router = useRouter();
 
 const selectedKeys = ref<string[]>([]);
 const openKeys = ref([]);

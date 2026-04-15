@@ -1,17 +1,22 @@
 import './assets/main.css'
 
-import { createApp } from 'vue'
+import { ViteSSG } from 'vite-ssg'
 import { createPinia } from 'pinia'
-import Antd from 'ant-design-vue';
-import 'ant-design-vue/dist/reset.css';
+import Antd from 'ant-design-vue'
+import 'ant-design-vue/dist/reset.css'
 
 import App from './App.vue'
-import router from './router'
+import { routes } from './router'
 
-const app = createApp(App)
-
-app.use(createPinia())
-app.use(router)
-app.use(Antd)
-
-app.mount('#app')
+// https://github.com/antfu/vite-ssg
+export const createApp = ViteSSG(
+  App,
+  { routes, base: '/xhl-tools-vue/' },
+  ({ app, router, initialState }) => {
+    const pinia = createPinia()
+    
+    // 安装插件
+    app.use(pinia)
+    app.use(Antd)
+  }
+)

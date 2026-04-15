@@ -8,7 +8,7 @@
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "test:unit": "vitest",
-    "build-only": "vite build && node -e \"require('fs').writeFileSync('dist/.nojekyll', '')\"",
+    "build-only": "vite-ssg build && node -e \"require('fs').writeFileSync('dist/.nojekyll', '')\"",
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix",
     "deploy": "gh-pages -d dist --dotfiles"
@@ -41,6 +41,7 @@
     "typescript": "~5.6.3",
     "vite": "^6.0.5",
     "vite-plugin-vue-devtools": "^7.6.8",
+    "vite-ssg": "^28.3.0",
     "vitest": "^2.1.8",
     "vue-tsc": "^2.1.10"
   }

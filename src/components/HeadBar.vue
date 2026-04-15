@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import {computed, ref, watch} from "vue";
-import {type RouteRecordRaw, useRoute} from "vue-router";
-import router from "@/router";
+import {type RouteRecordRaw, useRoute, useRouter} from "vue-router";
 import {badString} from "@/utils/string_utils.ts";
 import {GithubOutlined} from "@ant-design/icons-vue";
+
+const router = useRouter();
 
 defineProps<{
   routes: RouteRecordRaw[];
