@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import {computed, ref, watch} from "vue";
-import {type RouteRecordRaw, useRoute, useRouter} from "vue-router";
-import {badString} from "@/utils/string_utils.ts";
-import {GithubOutlined} from "@ant-design/icons-vue";
+import { computed, ref, watch } from "vue";
+import { type RouteRecordRaw, useRoute, useRouter } from "vue-router";
+import { badString } from "@/utils/string_utils.ts";
+import { GithubOutlined } from "@ant-design/icons-vue";
 
 const router = useRouter();
 
 defineProps<{
   routes: RouteRecordRaw[];
 }>()
+
 const currentItem = ref<string[]>([]);
 const route = useRoute();
 const routeCurrent = computed(() => {
@@ -19,8 +20,9 @@ const routeCurrent = computed(() => {
     return name;
   }
 });
+
 const handleMenuSelect = (params: { key: string }) => {
-  router.push({name: params.key});
+  router.push({ name: params.key });
 };
 
 watch(route, () => {
@@ -28,26 +30,42 @@ watch(route, () => {
   if (!badString(name)) {
     currentItem.value = [name as string];
   }
-});
+}, { immediate: true });
 </script>
 
 <template>
-  <div class="head-bar__container">
-    <div class="head-bar__left-container">
-      <img src="@/assets/logo.jpg" alt="Logo" width="48">
+  <div class="head-bar">
+    <div class="head-bar__left">
+      <div class="head-bar__logo">
+        <img src="@/assets/logo.jpg" alt="XHL Tools" class="logo-image">
+        <span class="logo-text">XHL Tools</span>
+      </div>
+      
       <a-menu
-        v-model:selected-keys="currentItem"
+        v-model:selectedKeys="currentItem"
         mode="horizontal"
-        :style="{ lineHeight: '64px' }"
+        class="head-bar__menu"
         @click="handleMenuSelect"
       >
-        <a-menu-item v-for="route in routes" :key="route.name">{{ route.meta?.title ?? '-' }}</a-menu-item>
+        <a-menu-item 
+          v-for="route in routes" 
+          :key="route.name"
+          class="head-bar__menu-item"
+        >
+          {{ route.meta?.title ?? '-' }}
+        </a-menu-item>
       </a-menu>
     </div>
-    <div class="head-bar__button-container">
-      <a-tooltip title="Github">
-        <a-button type="text" href="https://github.com/starburst-xhl/xhl-tools-vue" target="_blank">
-          <GithubOutlined/>
+    
+    <div class="head-bar__right">
+      <a-tooltip title="访问 GitHub 仓库">
+        <a-button 
+          type="text" 
+          href="https://github.com/starburst-xhl/xhl-tools-vue" 
+          target="_blank"
+          class="head-bar__github-btn"
+        >
+          <GithubOutlined />
         </a-button>
       </a-tooltip>
     </div>
@@ -55,23 +73,93 @@ watch(route, () => {
 </template>
 
 <style scoped>
-.head-bar__container {
+.head-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 64px;
+  padding: 0 var(--spacing-xl);
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-.head-bar__left-container {
+.head-bar__left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--spacing-lg);
+  flex: 1;
 }
 
-.head-bar__button-container {
+.head-bar__logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
+  gap: var(--spacing-sm);
+}
+
+.logo-image {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+}
+
+.logo-text {
+  font-size: var(--font-size-h4);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-title);
+}
+
+.head-bar__menu {
+  flex: 1;
+  border-bottom: none;
+  line-height: 62px;
+}
+
+.head-bar__menu-item {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  transition: var(--transition-fast);
+}
+
+.head-bar__menu-item:hover {
+  color: var(--color-primary);
+}
+
+.head-bar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.head-bar__github-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  font-size: 20px;
+  transition: var(--transition-fast);
+}
+
+.head-bar__github-btn:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-primary);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .head-bar {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .logo-text {
+    display: none;
+  }
+  
+  .head-bar__menu {
+    font-size: var(--font-size-body-sm);
+  }
 }
 </style>

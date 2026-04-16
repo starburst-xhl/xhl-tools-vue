@@ -1,0 +1,84 @@
+/**
+ * 响应式断点设计令牌
+ * Breakpoints Design Tokens
+ * 
+ * 定义响应式设计的断点标准
+ */
+
+:root {
+  /* ========== 断点定义 ========== */
+  /* 移动端断点 */
+  --breakpoint-mobile: 768px;
+  
+  /* 平板断点 */
+  --breakpoint-tablet: 1024px;
+  
+  /* 桌面断点 */
+  --breakpoint-desktop: 1280px;
+  
+  /* 大屏断点 */
+  --breakpoint-wide: 1440px;
+
+  /* ========== 容器最大宽度 ========== */
+  /* 移动端容器 */
+  --container-mobile: 100%;
+  
+  /* 平板容器 */
+  --container-tablet: 720px;
+  
+  /* 桌面容器 */
+  --container-desktop: 960px;
+  
+  /* 大屏容器 */
+  --container-wide: 1200px;
+
+  /* ========== 栅格系统 ========== */
+  --grid-columns: 12;
+  --grid-gutter: 24px;
+  --grid-gutter-mobile: 16px;
+}
+
+/* 响应式容器 */
+.container {
+  width: 100%;
+  max-width: var(--container-wide);
+  margin: 0 auto;
+  padding-left: var(--padding-page-mobile);
+  padding-right: var(--padding-page-mobile);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: var(--padding-page-tablet);
+    padding-right: var(--padding-page-tablet);
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    padding-left: var(--padding-page-desktop);
+    padding-right: var(--padding-page-desktop);
+  }
+}
+
+/* 响应式工具类 */
+/* 移动端隐藏 */
+@media (max-width: 767px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+/* 平板及以上显示 */
+@media (max-width: 1023px) {
+  .hide-tablet {
+    display: none !important;
+  }
+}
+
+/* 仅桌面显示 */
+@media (min-width: 1024px) {
+  .show-desktop {
+    display: block !important;
+  }
+}

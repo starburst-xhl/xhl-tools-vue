@@ -1,0 +1,77 @@
+/**
+ * 间距设计令牌
+ * Spacing Design Tokens
+ * 
+ * 基于 8px 基准单位的间距系统
+ */
+
+:root {
+  /* ========== 基础间距单位 ========== */
+  --spacing-unit: 8px;
+
+  /* ========== 间距层级 ========== */
+  /* 超小间距 - 4px */
+  --spacing-xs: 4px;
+  
+  /* 小间距 - 8px */
+  --spacing-sm: 8px;
+  
+  /* 中小间距 - 12px */
+  --spacing-md-sm: 12px;
+  
+  /* 中等间距 - 16px */
+  --spacing-md: 16px;
+  
+  /* 中大间距 - 20px */
+  --spacing-md-lg: 20px;
+  
+  /* 大间距 - 24px */
+  --spacing-lg: 24px;
+  
+  /* 较大间距 - 32px */
+  --spacing-xl: 32px;
+  
+  /* 超大间距 - 40px */
+  --spacing-xxl: 40px;
+  
+  /* 特大间距 - 48px */
+  --spacing-xxxl: 48px;
+  
+  /* 巨大间距 - 64px */
+  --spacing-xxxxl: 64px;
+  
+  /* 超特大间距 - 80px */
+  --spacing-xxxxxl: 80px;
+
+  /* ========== 组件内边距 ========== */
+  /* 紧凑组件内边距 */
+  --padding-compact: 8px 12px;
+  
+  /* 默认组件内边距 */
+  --padding-default: 12px 16px;
+  
+  /* 宽松组件内边距 */
+  --padding-comfortable: 16px 24px;
+  
+  /* 大型组件内边距 */
+  --padding-large: 24px 32px;
+
+  /* ========== 页面容器内边距 ========== */
+  --padding-page-mobile: 16px;
+  --padding-page-tablet: 24px;
+  --padding-page-desktop: 32px;
+
+  /* ========== 卡片内边距 ========== */
+  --padding-card: 24px;
+  --padding-card-sm: 16px;
+  --padding-card-lg: 32px;
+}
+
+/* 响应式间距调整 */
+@media (max-width: 768px) {
+  :root {
+    --padding-page-mobile: 12px;
+    --padding-card: 16px;
+    --padding-card-lg: 24px;
+  }
+}

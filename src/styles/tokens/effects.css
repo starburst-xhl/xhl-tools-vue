@@ -1,0 +1,123 @@
+/**
+ * 视觉效果设计令牌
+ * Effects Design Tokens
+ * 
+ * 包含圆角、阴影、过渡动画和边框
+ */
+
+:root {
+  /* ========== 圆角 ========== */
+  /* 小圆角 - 4px (按钮、标签) */
+  --radius-sm: 4px;
+  
+  /* 中小圆角 - 6px (小组件) */
+  --radius-md-sm: 6px;
+  
+  /* 中等圆角 - 8px (输入框、小组件) */
+  --radius-md: 8px;
+  
+  /* 中大圆角 - 10px (中等组件) */
+  --radius-md-lg: 10px;
+  
+  /* 大圆角 - 12px (卡片、容器) */
+  --radius-lg: 12px;
+  
+  /* 超大圆角 - 16px (大容器) */
+  --radius-xl: 16px;
+  
+  /* 特大圆角 - 20px (徽章、大按钮) */
+  --radius-xxl: 20px;
+  
+  /* 全圆 */
+  --radius-full: 9999px;
+
+  /* ========== 阴影层级 ========== */
+  /* 轻微阴影 - 卡片悬停 */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  
+  /* 中等阴影 - 下拉菜单 */
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  
+  /* 重阴影 - 模态框 */
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+  
+  /* 超重阴影 - 浮动组件 */
+  --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.20);
+
+  /* 特殊阴影 */
+  /* 内阴影 */
+  --shadow-inner: inset 0 2px 8px rgba(0, 0, 0, 0.08);
+  
+  /* 卡片悬停阴影 */
+  --shadow-card-hover: 0 8px 24px rgba(255, 155, 23, 0.15);
+
+  /* ========== 过渡动画 ========== */
+  /* 持续时间 */
+  --duration-fast: 0.15s;
+  --duration-normal: 0.3s;
+  --duration-slow: 0.5s;
+  
+  /* 缓动函数 */
+  --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);
+  --easing-accelerate: cubic-bezier(0.4, 0.0, 1, 1);
+  --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* 常用过渡 */
+  --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ========== 边框 ========== */
+  --border-width: 1px;
+  --border-width-thick: 2px;
+  --border-style: solid;
+
+  /* ========== 透明度 ========== */
+  --opacity-disabled: 0.4;
+  --opacity-hover: 0.8;
+  --opacity-active: 0.6;
+}
+
+/* 动画关键帧 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -1,0 +1,106 @@
+/**
+ * 色彩设计令牌
+ * Color Design Tokens
+ * 
+ * 包含主色、中性色、功能色和背景色体系
+ */
+
+:root {
+  /* ========== 主色系统 ========== */
+  --color-primary: #ff9b17;
+  --color-primary-light: #ffb84d;
+  --color-primary-dark: #e68a00;
+  --color-primary-bg: #fff8f0;
+  --color-primary-bg-light: #fffbf5;
+  --color-primary-hover: #ff8c00;
+  --color-primary-active: #d97a00;
+
+  /* ========== 中性色系统 ========== */
+  /* 标题文字 */
+  --color-text-title: #1a1a1a;
+  
+  /* 主要文字 */
+  --color-text-primary: #262626;
+  
+  /* 次要文字 */
+  --color-text-secondary: #666666;
+  
+  /* 辅助文字 */
+  --color-text-tertiary: #8c8c8c;
+  
+  /* 禁用文字 */
+  --color-text-disabled: #bfbfbf;
+  
+  /* 占位符文字 */
+  --color-text-placeholder: #bfbfbf;
+
+  /* ========== 边框色 ========== */
+  --color-border: #d9d9d9;
+  --color-border-light: #f0f0f0;
+  --color-border-lighter: #f5f5f5;
+  --color-border-dark: #bfbfbf;
+
+  /* ========== 背景色 ========== */
+  /* 页面背景 */
+  --color-bg: #fafafa;
+  
+  /* 组件背景 */
+  --color-bg-component: #ffffff;
+  
+  /* 悬停背景 */
+  --color-bg-hover: #f5f5f5;
+  
+  /* 选中背景 */
+  --color-bg-selected: #fff8f0;
+  
+  /* 禁用背景 */
+  --color-bg-disabled: #f5f5f5;
+  
+  /* 工具显示背景 */
+  --color-bg-tool-display: rgb(255, 248, 230);
+
+  /* ========== 功能色系统 ========== */
+  /* 成功 */
+  --color-success: #52c41a;
+  --color-success-light: #73d13d;
+  --color-success-dark: #389e0d;
+  --color-success-bg: #f6ffed;
+
+  /* 警告 */
+  --color-warning: #faad14;
+  --color-warning-light: #ffc53d;
+  --color-warning-dark: #d48806;
+  --color-warning-bg: #fffbe6;
+
+  /* 错误 */
+  --color-error: #ff4d4f;
+  --color-error-light: #ff7875;
+  --color-error-dark: #cf1322;
+  --color-error-bg: #fff2f0;
+
+  /* 信息 */
+  --color-info: #1890ff;
+  --color-info-light: #40a9ff;
+  --color-info-dark: #096dd9;
+  --color-info-bg: #e6f7ff;
+
+  /* ========== 分割线 ========== */
+  --color-divider: #f0f0f0;
+
+  /* ========== 阴影色 ========== */
+  --color-shadow: rgba(0, 0, 0, 0.08);
+  --color-shadow-light: rgba(0, 0, 0, 0.04);
+  --color-shadow-dark: rgba(0, 0, 0, 0.12);
+}
+
+/* 深色模式预留 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* 深色模式变量预留 */
+    --color-bg: #141414;
+    --color-bg-component: #1f1f1f;
+    --color-text-title: #ffffff;
+    --color-text-primary: #d9d9d9;
+    --color-text-secondary: #8c8c8c;
+  }
+}

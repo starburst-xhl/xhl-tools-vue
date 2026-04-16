@@ -101,10 +101,14 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #d9d9d9;
+  background-color: var(--color-bg-tool-display);
   height: 64px;
   margin-bottom: 24px;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  padding: 0 32px;
+  border-radius: 8px;
+  color: #ff9b17;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
 }
 
 .password-generator__button-container {

@@ -1,0 +1,13 @@
+/**
+ * 设计令牌汇总导入
+ * Design Tokens Index
+ * 
+ * 统一导入所有设计令牌文件
+ */
+
+/* 导入所有设计令牌 */
+@import './colors.css';
+@import './typography.css';
+@import './spacing.css';
+@import './effects.css';
+@import './breakpoints.css';
