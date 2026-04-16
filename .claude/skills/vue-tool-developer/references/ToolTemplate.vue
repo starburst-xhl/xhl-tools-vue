@@ -51,7 +51,6 @@ const copyResult = async () => {
       <a-input
         v-model:value="inputValue"
         placeholder="请输入内容"
-        size="large"
         class="tool-template__input"
         @pressEnter="processInput"
       />
@@ -61,29 +60,26 @@ const copyResult = async () => {
     <div class="tool-template__actions">
       <a-button
         type="primary"
-        size="large"
         :loading="isLoading"
         @click="processInput"
       >
         处理
       </a-button>
-      <a-button size="large" @click="resetForm">
+      <a-button @click="resetForm">
         重置
       </a-button>
     </div>
 
     <!-- 结果展示 -->
-    <a-card v-if="result" class="tool-template__result">
-      <template #title>
-        <div class="tool-template__result-header">
-          <span>处理结果</span>
-          <a-button type="link" size="small" @click="copyResult">
-            复制
-          </a-button>
-        </div>
-      </template>
+    <div v-if="result" class="tool-template__result">
+      <div class="tool-template__result-header">
+        <span class="tool-template__result-title">处理结果</span>
+        <a-button type="link" size="small" @click="copyResult">
+          复制
+        </a-button>
+      </div>
       <p class="tool-template__result-text">{{ result }}</p>
-    </a-card>
+    </div>
   </div>
 </template>
 
@@ -93,7 +89,6 @@ const copyResult = async () => {
   flex-direction: column;
   gap: var(--spacing-lg);
   max-width: 500px;
-  animation: fadeIn var(--duration-normal) var(--easing-standard);
 }
 
 .tool-template__input-section {
@@ -111,8 +106,9 @@ const copyResult = async () => {
 }
 
 .tool-template__result {
+  background: var(--color-bg);
+  padding: var(--spacing-lg);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border-light);
 }
 
@@ -120,6 +116,10 @@ const copyResult = async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.tool-template__result-title {
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-title);
 }
@@ -129,17 +129,5 @@ const copyResult = async () => {
   font-size: var(--font-size-body);
   color: var(--color-text-secondary);
   line-height: var(--line-height-body);
-}
-
-/* 使用全局动画 */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 </style>

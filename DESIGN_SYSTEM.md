@@ -170,6 +170,8 @@
 
 ### 阴影层级
 
+> **⚠️ 注意**：项目采用扁平化设计，工具页面不使用阴影。以下阴影令牌仅用于特殊场景（模态框、下拉菜单、浮动组件）。
+
 ```css
 --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08)      /* 轻微阴影 */
 --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12)     /* 中等阴影 */
@@ -177,11 +179,16 @@
 --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.20)    /* 超重阴影 */
 ```
 
-**使用场景：**
-- sm: 卡片默认状态
-- md: 下拉菜单、悬停卡片
-- lg: 模态框、浮动组件
-- xl: 重要弹窗
+**使用场景**（仅限以下特殊场景）：
+- sm: 下拉菜单、小型浮动组件
+- md: 下拉菜单、浮动组件
+- lg: 模态框、重要弹窗
+- xl: 全屏模态框、重要弹窗
+
+**❌ 不适用于**：
+- 卡片组件（使用边框）
+- 结果区域（使用边框）
+- 工具页面容器（扁平化设计）
 
 ### 过渡动画
 
@@ -278,26 +285,54 @@
 
 ### 功能组件
 
-#### 卡片 (Card)
+#### 卡片 (Card) - 扁平化风格
 ```css
 .card {
   background: var(--color-bg-component);
   border-radius: var(--radius-lg);
-  padding: var(--padding-card);
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition-normal);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border-light);
+  /* 无阴影 - 扁平化设计 */
 }
 
 .card:hover {
-  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
 }
 ```
 
+**设计理念**：
+- ✅ 扁平化设计，减少视觉噪音
+- ✅ 使用边框而非阴影区分层次
+- ✅ 悬停时边框变色，提供交互反馈
+
 #### 按钮 (Button)
+- **默认大小**（推荐）: 适合工具页面按钮组
+- **形状**: 默认方形（不使用 `shape="circle"` 或 `shape="round"`）
+- **图标**: 主操作按钮可添加图标，次要按钮可选
 - 主按钮: 橙色背景，白色文字
 - 次按钮: 白色背景，橙色边框
-- 悬停效果: 上浮 2px + 阴影增强
-- 圆角: radius-md (8px)
+- 悬停效果: 边框变色或背景色调整
+- 圆角: radius-md (8px) - 由 Ant Design Vue 默认提供
+
+**按钮规范示例**：
+```vue
+<!-- ✅ 推荐：默认大小 + 方形 + 可选图标 -->
+<a-button type="primary">格式化</a-button>
+<a-button>重置</a-button>
+<a-button type="primary">
+  <template #icon>
+    <CopyOutlined/>
+  </template>
+  复制
+</a-button>
+
+<!-- ❌ 避免：圆形或圆角按钮 -->
+<a-button shape="circle">❌</a-button>
+<a-button shape="round">❌</a-button>
+
+<!-- ✅ 小按钮：仅用于辅助操作（如"复制"链接） -->
+<a-button type="link" size="small">复制</a-button>
+```
 
 #### 输入框 (Input)
 - 高度: 32px (默认) / 40px (large)
@@ -314,7 +349,7 @@
 - 圆角: radius-lg (12px)
 - 图标区域: 56x56px，无背景色
 - 内容区域: 自适应宽度，左侧间距 24px
-- 悬停: 上浮 4px + 阴影 + 橙色边框
+- 悬停: 上浮 4px + 橙色边框（无阴影）
 
 **网格布局** (备选):
 - 高度: 180px
@@ -325,9 +360,105 @@
 - 最大宽度: 800px
 - 背景: 白色
 - 圆角: radius-lg (12px)
-- 阴影: shadow-sm
-- 边框: 1px solid #f0f0f0
-- 居中对齐: `margin: 0 auto`
+- **无边框无阴影** - 扁平化设计，依赖外层容器
+- 内容区使用浅色背景区分
+```css
+.result-section {
+  background: var(--color-bg);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-light);
+}
+```
+
+**最佳实践**：
+- ✅ 使用 `div` 而非 `a-card`，保持轻量
+- ✅ 浅色背景 + 边框，无阴影
+- ✅ 悬停时边框变色，提供交互反馈
+- ✅ 与工具列表页风格一致
+
+### 交互规范
+
+#### 用户反馈 - Message 组件
+
+**使用 Ant Design Vue 的 `message` 组件**提供全局提示：
+
+```typescript
+import { message } from "ant-design-vue";
+
+// ✅ 成功提示
+message.success("操作成功");
+
+// ✅ 错误提示
+message.error("操作失败");
+
+// ✅ 警告提示
+message.warning("请输入内容");
+
+// ✅ 信息提示（少用）
+message.info("提示信息");
+```
+
+**使用场景分类**：
+
+| 类型 | 使用场景 | 示例 |
+|------|---------|------|
+| **success** | 操作成功完成 | 格式化成功、复制成功、保存成功 |
+| **error** | 操作失败 | 格式错误、网络错误、解析失败 |
+| **warning** | 输入问题 | 空输入、参数缺失、格式不正确 |
+| **info** | 信息提示 | 状态更新（极少使用） |
+
+**文案规范**：
+- ✅ **简洁明确**：直接说明结果或问题
+- ✅ **具体描述**：错误提示要说明具体原因
+- ✅ **用户视角**：从用户角度描述问题
+- ❌ **避免笼统**：不要只说"错误"或"操作成功"
+
+**文案示例**：
+
+```typescript
+// ✅ 好的提示
+message.success("格式化成功");
+message.success("已复制到剪贴板");
+message.error("JSON格式不正确");
+message.error("网络连接失败，请重试");
+message.warning("请输入JSON内容");
+message.warning("请至少选择一种字符类型");
+
+// ❌ 不好的提示
+message.success("操作成功");     // 太笼统
+message.error("错误");           // 没有信息量
+message.warning("有问题");       // 不够具体
+```
+
+#### 其他交互反馈
+
+**按钮加载状态** - 异步操作反馈：
+```vue
+<a-button :loading="isLoading">处理</a-button>
+```
+- 用于异步操作期间
+- 防止用户重复提交
+- 提供明确的操作状态
+
+**按钮禁用状态** - 表单验证反馈：
+```vue
+<a-button :disabled="!isValid">提交</a-button>
+```
+- 用于表单验证失败
+- 防止无效操作
+- 配合视觉提示
+
+**悬停反馈** - 即时视觉反馈：
+```css
+.element:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-bg);
+}
+```
+- 提供即时交互感知
+- 增强可点击暗示
+- 符合扁平化设计理念
 
 ## 📐 间距标准
 
@@ -347,27 +478,6 @@
 - 列表项: 8px
 
 ## 🎬 动画规范
-
-### 入场动画
-```css
-/* 淡入上滑 */
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 淡入 */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-```
 
 ### 交互动画
 - 悬停: transform + shadow

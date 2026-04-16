@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {onUnmounted, ref} from "vue";
+import {PlayCircleOutlined, PauseCircleOutlined, FieldTimeOutlined, ReloadOutlined} from "@ant-design/icons-vue";
 
 const startTime = ref<number | null>(null);
 const elapsedTime = ref<number>(0);
@@ -71,10 +72,22 @@ onUnmounted(() => {
       <p class="timer-tool__time">{{ formattedTime }}</p>
     </div>
     <div class="timer-tool__button-group">
-      <a-button @mousedown="startStopwatch" type="primary" v-show="!isRunning">启动</a-button>
-      <a-button @mousedown="stopStopwatch" type="primary" v-show="isRunning">停止</a-button>
-      <a-button @mousedown="lapStopwatch" :disabled="!isRunning">掐表</a-button>
-      <a-button @click="resetStopwatch">重置</a-button>
+      <a-button @mousedown="startStopwatch" type="primary" v-show="!isRunning">
+        <template #icon><PlayCircleOutlined /></template>
+        启动
+      </a-button>
+      <a-button @mousedown="stopStopwatch" type="primary" v-show="isRunning">
+        <template #icon><PauseCircleOutlined /></template>
+        停止
+      </a-button>
+      <a-button @mousedown="lapStopwatch" :disabled="!isRunning">
+        <template #icon><FieldTimeOutlined /></template>
+        掐表
+      </a-button>
+      <a-button @click="resetStopwatch">
+        <template #icon><ReloadOutlined /></template>
+        重置
+      </a-button>
     </div>
     <div v-if="lapRecords.length > 0" class="timer-tool__lap-list">
       <div class="timer-tool__lap-header">掐表记录</div>

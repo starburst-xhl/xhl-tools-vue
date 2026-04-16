@@ -79,12 +79,13 @@ onMounted(() => {
       </a-form-item-rest>
       <a-form-item-rest>
         <div class="password-generator__button-container">
-          <a-button shape="circle" @click="generatePassword">
+          <a-button @click="generatePassword">
             <template #icon>
               <RedoOutlined/>
             </template>
+            重新生成
           </a-button>
-          <a-button type="primary" shape="round" @click="() => {clipboard.writeText(password)}">
+          <a-button type="primary" @click="() => {clipboard.writeText(password)}">
             <template #icon>
               <CopyOutlined/>
             </template>

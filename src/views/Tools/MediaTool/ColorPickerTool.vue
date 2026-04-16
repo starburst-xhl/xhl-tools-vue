@@ -185,9 +185,7 @@ const copyColor = async (format: 'hex' | 'rgb' | 'rgba' | 'hsl') => {
         <a-button
           type="primary"
           ghost
-          size="large"
           @click="generateRandomColor"
-          class="color-picker__random-btn"
         >
           <template #icon>
             <ReloadOutlined />
@@ -327,10 +325,6 @@ const copyColor = async (format: 'hex' | 'rgb' | 'rgba' | 'hsl') => {
 .color-picker__actions {
   display: flex;
   justify-content: center;
-}
-
-.color-picker__random-btn {
-  font-weight: var(--font-weight-semibold);
 }
 
 /* 颜色拾取器 */

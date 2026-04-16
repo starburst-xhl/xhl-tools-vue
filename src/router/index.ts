@@ -59,6 +59,16 @@ export const routes = [
                   icon: 'LockOutlined',
                   description: 'AES加密和解密工具，保护您的数据安全'
                 }
+              },
+              {
+                path: 'json-formatter',
+                name: 'JsonFormatter',
+                component: () => import('@/views/Tools/CodecTool/JsonFormatter.vue'),
+                meta: {
+                  title: 'JSON格式化',
+                  icon: 'CodeOutlined',
+                  description: 'JSON格式化和压缩工具，美化或压缩JSON数据'
+                }
               }
             ],
           },

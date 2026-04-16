@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import type { MenuItemType } from "ant-design-vue/es/menu/src/interface";
 import { routeToMenuItems } from "@/utils/menu_utils.ts";
@@ -14,6 +14,7 @@ const openKeys = ref([]) as any;
 const items = ref<MenuItemType[]>([]);
 const collapsed = ref(false);
 const isMobile = ref(false);
+const pageContentRef = ref<HTMLElement | null>(null);
 
 // 当前路由的 meta 信息
 const currentMeta = computed(() => route.meta);
@@ -23,15 +24,21 @@ const currentIcon = computed(() =>
 
 function initItems() {
   // 获取当前匹配的路由记录
-  const matchedRecords = useRoute().matched;
+  const matchedRecords = route.matched;
   // 如果有至少两个层级，则获取二级路由
   const currentSecondLevelRoute = matchedRecords.length > 1 ? matchedRecords[1] : null;
   if (currentSecondLevelRoute) {
     items.value = routeToMenuItems(currentSecondLevelRoute.children);
-    const lastName = matchedRecords[matchedRecords.length - 1].name;
-    if (typeof lastName === 'string') {
-      selectedKeys.value.push(lastName);
-    }
+    updateSelectedKeys();
+  }
+}
+
+// 更新选中项
+function updateSelectedKeys() {
+  const matchedRecords = route.matched;
+  const lastName = matchedRecords[matchedRecords.length - 1].name;
+  if (typeof lastName === 'string') {
+    selectedKeys.value = [lastName];
   }
 }
 
@@ -64,6 +71,22 @@ function checkMobile() {
 function toggleSidebar() {
   collapsed.value = !collapsed.value;
 }
+
+// 重置滚动位置到顶部
+function resetScrollPosition() {
+  if (pageContentRef.value) {
+    pageContentRef.value.scrollTop = 0;
+  }
+}
+
+// 监听路由变化，更新菜单选中状态并重置滚动位置
+watch(
+  () => route.name,
+  () => {
+    updateSelectedKeys();
+    resetScrollPosition();
+  }
+);
 
 onMounted(() => {
   initItems();
@@ -127,7 +150,7 @@ onMounted(() => {
       </div>
 
       <!-- 可滚动内容区 -->
-      <div class="page-content">
+      <div ref="pageContentRef" class="page-content">
         <router-view />
       </div>
     </a-layout-content>
@@ -205,7 +228,7 @@ onMounted(() => {
   padding: var(--spacing-lg);
   background: var(--color-bg-component);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 
@@ -252,7 +275,6 @@ onMounted(() => {
   padding: var(--spacing-lg);
   background: var(--color-bg-component);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border-light);
   flex-shrink: 0;
   max-height: calc(100vh - 64px - 220px);
