@@ -1,0 +1,23 @@
+{
+  "skill_name": "vue-tool-developer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我想添加一个JSON格式化工具,可以将压缩的JSON美化显示",
+      "expected_output": "创建一个JSON格式化工具组件,包含输入框、格式化按钮、结果展示区域,使用设计令牌系统",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我需要一个Base64编码工具,能编码和解码字符串",
+      "expected_output": "创建Base64编解码工具,支持双向转换,包含输入、输出、操作按钮,遵循SSG架构规范",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "添加一个随机密码生成器,可以自定义长度和字符类型",
+      "expected_output": "创建密码生成器,支持长度设置、字符类型选择(数字、字母、符号),生成随机密码",
+      "files": []
+    }
+  ]
+}

@@ -45,25 +45,25 @@ const copyResult = async () => {
 </script>
 
 <template>
-  <div class="your-tool__container">
-    <!-- 主要内容区域 -->
-    <div class="your-tool__main-section">
+  <div class="tool-template">
+    <!-- 输入区域 -->
+    <div class="tool-template__input-section">
       <a-input
         v-model:value="inputValue"
         placeholder="请输入内容"
-        class="your-tool__input"
         size="large"
+        class="tool-template__input"
         @pressEnter="processInput"
       />
     </div>
 
-    <!-- 按钮区域 -->
-    <div class="your-tool__button-group">
+    <!-- 操作按钮 -->
+    <div class="tool-template__actions">
       <a-button
         type="primary"
         size="large"
-        @click="processInput"
         :loading="isLoading"
+        @click="processInput"
       >
         处理
       </a-button>
@@ -72,68 +72,63 @@ const copyResult = async () => {
       </a-button>
     </div>
 
-    <!-- 结果展示区域 -->
-    <div v-if="result" class="your-tool__result-section">
-      <a-card class="your-tool__result-card">
-        <template #title>
-          <div class="your-tool__result-title">
-            <span>处理结果</span>
-            <a-button type="link" size="small" @click="copyResult">
-              复制
-            </a-button>
-          </div>
-        </template>
-        <p class="your-tool__result-text">{{ result }}</p>
-      </a-card>
-    </div>
+    <!-- 结果展示 -->
+    <a-card v-if="result" class="tool-template__result">
+      <template #title>
+        <div class="tool-template__result-header">
+          <span>处理结果</span>
+          <a-button type="link" size="small" @click="copyResult">
+            复制
+          </a-button>
+        </div>
+      </template>
+      <p class="tool-template__result-text">{{ result }}</p>
+    </a-card>
   </div>
 </template>
 
 <style scoped>
-.your-tool__container {
+.tool-template {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--spacing-lg);
   max-width: 500px;
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn var(--duration-normal) var(--easing-standard);
 }
 
-.your-tool__main-section {
+.tool-template__input-section {
   width: 100%;
 }
 
-.your-tool__input {
+.tool-template__input {
   width: 100%;
 }
 
-.your-tool__button-group {
+.tool-template__actions {
   display: flex;
-  gap: 12px;
+  gap: var(--spacing-md-sm);
   justify-content: center;
 }
 
-.your-tool__result-section {
-  margin-top: 8px;
+.tool-template__result {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border-light);
 }
 
-.your-tool__result-card {
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-.your-tool__result-title {
+.tool-template__result-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 600;
-  color: #262626;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-title);
 }
 
-.your-tool__result-text {
+.tool-template__result-text {
   margin: 0;
-  font-size: 15px;
-  color: #595959;
-  line-height: 1.6;
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-body);
 }
 
 /* 使用全局动画 */
