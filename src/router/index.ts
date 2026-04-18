@@ -97,6 +97,16 @@ export const routes = [
                   description: '生成安全的随机密码，支持自定义长度和字符类型'
                 }
               },
+              {
+                path: 'dice-tool',
+                name: 'DiceTool',
+                component: () => import('@/views/Tools/NumberTool/DiceTool.vue'),
+                meta: {
+                  title: '骰子',
+                  icon: 'TableOutlined',
+                  description: '仿真骰子工具，支持仿真模式和自定义面数'
+                }
+              },
             ]
           },
           {

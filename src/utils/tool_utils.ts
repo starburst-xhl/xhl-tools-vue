@@ -8,6 +8,7 @@ import {
   KeyOutlined,
   FileImageOutlined,
   BgColorsOutlined,
+  TableOutlined,
 } from '@ant-design/icons-vue'
 
 /**
@@ -42,6 +43,7 @@ const iconMap: Record<string, any> = {
   KeyOutlined,
   FileImageOutlined,
   BgColorsOutlined,
+  TableOutlined,
 }
 
 /**
