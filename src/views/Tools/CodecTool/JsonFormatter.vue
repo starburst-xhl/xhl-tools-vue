@@ -19,7 +19,7 @@ const formatJson = async () => {
     const parsed = JSON.parse(inputValue.value);
     result.value = JSON.stringify(parsed, null, 2);
     message.success("格式化成功");
-  } catch (error) {
+  } catch {
     message.error("JSON格式不正确");
     result.value = "";
   } finally {
@@ -39,7 +39,7 @@ const compressJson = async () => {
     const parsed = JSON.parse(inputValue.value);
     result.value = JSON.stringify(parsed);
     message.success("压缩成功");
-  } catch (error) {
+  } catch {
     message.error("JSON格式不正确");
     result.value = "";
   } finally {
@@ -59,11 +59,11 @@ const copyResult = async () => {
     message.warning("没有可复制的内容");
     return;
   }
-  
+
   try {
     await navigator.clipboard.writeText(result.value);
     message.success("已复制到剪贴板");
-  } catch (error) {
+  } catch {
     message.error("复制失败");
   }
 };
@@ -127,7 +127,6 @@ const copyResult = async () => {
 
 .json-formatter__textarea {
   width: 100%;
-  font-family: 'Courier New', Consolas, monospace;
   font-size: var(--font-size-body-sm);
 }
 
