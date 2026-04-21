@@ -36,6 +36,16 @@ const generateId = (): string => {
   return Date.now().toString(36) + Math.random().toString(36).substring(2);
 };
 
+// 处理添加字段
+const handleAddField = (key: string | number) => {
+  addField(key as FieldType);
+};
+
+// 菜单点击处理（避免模板中内联类型注解）
+const onMenuClick = (e: { key: string | number }) => {
+  handleAddField(e.key);
+};
+
 /**
  * 生成随机中文姓名
  */
@@ -308,7 +318,7 @@ watch([fields, generateCount], () => {
             添加字段
           </a-button>
           <template #overlay>
-            <a-menu @click="({ key }: { key: FieldType }) => addField(key)">
+            <a-menu @click="onMenuClick">
               <a-menu-item key="name">姓名</a-menu-item>
               <a-menu-item key="idCard">身份证</a-menu-item>
               <a-menu-item key="email">邮箱</a-menu-item>
