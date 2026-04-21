@@ -6,7 +6,7 @@
 import { writeFileSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-const BASE_URL = 'https://starburst-xhl.github.io/xhl-tools-vue'
+const BASE_URL = 'https://tools.xhcy.cc'
 const today = new Date().toISOString().split('T')[0]
 
 // 读取源工具路由配置

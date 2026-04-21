@@ -11,7 +11,7 @@ import { routes } from './router'
 // https://github.com/antfu/vite-ssg
 export const createApp = ViteSSG(
   App,
-  { routes, base: '/xhl-tools-vue/' },
+  { routes, base: '/' },
   ({ app, router, initialState }) => {
     const pinia = createPinia()
     

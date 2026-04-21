@@ -7,7 +7,7 @@ import { useRoute } from 'vue-router'
 import { computed, watch } from 'vue'
 import { toolRoutes } from '@/constants/tool-routes'
 
-const BASE_URL = 'https://starburst-xhl.github.io/xhl-tools-vue'
+const BASE_URL = 'https://tools.xhcy.cc'
 const SITE_NAME = 'XHL Tools'
 const DEFAULT_DESCRIPTION = '开源免费的工具集合网站，提供Base64编解码、二维码生成、AES加密、JSON格式化、密码生成器等多种在线工具'
 

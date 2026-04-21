@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**xhl-tools-vue** is a Vue 3 + TypeScript + Vite Static Site Generation (SSG) application that serves as a tools and utilities web portal. It's deployed to GitHub Pages at `/xhl-tools-vue/`.
+**xhl-tools-vue** is a Vue 3 + TypeScript + Vite Static Site Generation (SSG) application that serves as a tools and utilities web portal. It's deployed to custom domain `tools.xhcy.cc` with root path `/`.
 
 ## Key Commands
 
@@ -43,7 +43,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `src/router/index.ts` | Route configuration and dynamic menu generation |
 | `src/utils/tool_constants.ts` | Tool definitions and metadata |
 | `src/views/Tools/` | Tool page components organized by category |
-| `vite.config.ts` | Build configuration with GitHub Pages base path |
+| `vite.config.ts` | Build configuration with root base path |
 
 ### Adding New Tools
 

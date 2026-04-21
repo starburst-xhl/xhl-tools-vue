@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is a Vue 3 + TypeScript static site generator (SSG) project built with Vite and vite-ssg. It's a tools collection website that generates 14 static HTML pages for better SEO and performance. The project deploys to GitHub Pages at `/xhl-tools-vue/` base path.
+This is a Vue 3 + TypeScript static site generator (SSG) project built with Vite and vite-ssg. It's a tools collection website that generates 14 static HTML pages for better SEO and performance. The project deploys to custom domain `tools.xhcy.cc` with root path `/`.
 
 ## Development Commands
 
@@ -46,7 +46,7 @@ The project uses **vite-ssg** for static site generation. Key architectural deci
 
 **Router Configuration (src/router/index.ts)**:
 - Exports `routes` array instead of router instance (required for SSG)
-- Uses `createWebHistory` with base path `/xhl-tools-vue/`
+- Uses `createWebHistory` with base path `/`
 - Route structure: Root `/` → children: `/home`, `/tools` (with nested routes)
 - Components use dynamic imports: `() => import('@/views/...')`
 
@@ -161,6 +161,6 @@ fnm use 22
 ## Deployment
 
 The project is configured for GitHub Pages deployment:
-- Base path: `/xhl-tools-vue/`
+- Base path: `/` (custom domain `tools.xhcy.cc`)
 - Build output includes `.nojekyll` file to disable Jekyll processing
 - Use `npm run deploy` to push `dist/` to `gh-pages` branch
