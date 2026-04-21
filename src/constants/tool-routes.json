@@ -1,0 +1,110 @@
+{
+  "routes": [
+    {
+      "path": "/home",
+      "title": "首页",
+      "description": "XHL Tools - 开源免费的在线工具集合",
+      "category": "home",
+      "priority": "1.0",
+      "changefreq": "weekly"
+    },
+    {
+      "path": "/tools/tool-home",
+      "title": "工具首页",
+      "description": "浏览和搜索所有可用工具",
+      "category": "home",
+      "priority": "0.9",
+      "changefreq": "weekly"
+    },
+    {
+      "path": "/tools/codec-tool/base64-tool",
+      "title": "Base64编解码",
+      "description": "Base64编码和解码工具，支持文本的Base64格式转换",
+      "icon": "CodeOutlined",
+      "category": "codec-tool",
+      "priority": "0.8",
+      "changefreq": "monthly"
+    },
+    {
+      "path": "/tools/codec-tool/qr-code",
+      "title": "二维码生成",
+      "description": "快速生成二维码，支持自定义内容和样式",
+      "icon": "QrcodeOutlined",
+      "category": "codec-tool",
+      "priority": "0.8",
+      "changefreq": "monthly"
+    },
+    {
+      "path": "/tools/codec-tool/aes-tool",
+      "title": "AES加解密",
+      "description": "AES加密和解密工具，保护您的数据安全",
+      "icon": "LockOutlined",
+      "category": "codec-tool",
+      "priority": "0.8",
+      "changefreq": "monthly"
+    },
+    {
+      "path": "/tools/codec-tool/json-formatter",
+      "title": "JSON格式化",
+      "description": "JSON格式化和压缩工具，美化或压缩JSON数据",
+      "icon": "CodeOutlined",
+      "category": "codec-tool",
+      "priority": "0.8",
+      "changefreq": "monthly"
+    },
+    {
+      "path": "/tools/number-tool/stopwatch-tool",
+      "title": "秒表",
+      "description": "精准计时工具，支持开始、暂停、重置等操作",
+      "icon": "ClockCircleOutlined",
+      "category": "number-tool",
+      "priority": "0.7",
+      "changefreq": "monthly"
+    },
+    {
+      "path": "/tools/number-tool/password-generator",
+      "title": "密码生成器",
+      "description": "生成安全的随机密码，支持自定义长度和字符类型",
+      "icon": "KeyOutlined",
+      "category": "number-tool",
+      "priority": "0.7",
+      "changefreq": "monthly"
+    },
+    {
+      "path": "/tools/number-tool/dice-tool",
+      "title": "骰子",
+      "description": "仿真骰子工具，支持仿真模式和自定义面数",
+      "icon": "TableOutlined",
+      "category": "number-tool",
+      "priority": "0.7",
+      "changefreq": "monthly"
+    },
+    {
+      "path": "/tools/media-tool/rpgmvp-to-png",
+      "title": "RPGMVP转PNG",
+      "description": "将RPG Maker加密图片格式转换为PNG格式",
+      "icon": "FileImageOutlined",
+      "category": "media-tool",
+      "priority": "0.7",
+      "changefreq": "monthly"
+    },
+    {
+      "path": "/tools/media-tool/color-picker",
+      "title": "颜色拾取器",
+      "description": "颜色拾取器，支持HEX、RGB、HSL多种格式转换和复制",
+      "icon": "BgColorsOutlined",
+      "category": "media-tool",
+      "priority": "0.7",
+      "changefreq": "monthly"
+    },
+    {
+      "path": "/tools/mock-tool/mock-data-generator",
+      "title": "Mock数据生成",
+      "description": "生成Mock测试数据，支持姓名、身份证、邮箱、手机等预置字段",
+      "icon": "DatabaseOutlined",
+      "category": "mock-tool",
+      "priority": "0.7",
+      "changefreq": "monthly"
+    }
+  ]
+}

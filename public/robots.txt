@@ -1,0 +1,9 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://starburst-xhl.github.io/xhl-tools-vue/sitemap.xml
+
+# Crawl-delay (optional, be considerate to the host)
+Crawl-delay: 10

@@ -5,9 +5,13 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import HeadBar from "@/components/HeadBar.vue";
 import { computed } from "vue";
+import { usePageSeo } from "@/utils/seo_utils";
 
 dayjs.locale('zh-cn');
 const locale = zhCN;
+
+// 初始化页面 SEO
+usePageSeo();
 
 const rootRoutes = computed(() => {
   const rootRoute = useRouter().getRoutes().find(route => route.path === '/');

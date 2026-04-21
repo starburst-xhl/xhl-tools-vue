@@ -12,11 +12,12 @@ description: 开发XHL Tools工具箱的新工具。当用户要添加新工具�
 ### 1. 确定工具分类
 
 **现有分类** (`src/views/Tools/`):
-- `CodecTool/` - 编解码工具
-- `AesTool/` - 加密工具  
-- `NumberTool/` - 数字工具
-- `MediaTool/` - 媒体工具
+- `CodecTool/` - 编解码工具(Base64/二维码/AES/JSON)
+- `NumberTool/` - 数字工具(秒表/密码生成器/骰子)
+- `MediaTool/` - 媒体工具(RPGMVP转换/颜色拾取)
+- `MockTool/` - Mock工具
 - `ChatTool/` - 聊天工具
+- `StringTool/` - 字符串工具
 
 ### 2. 创建组件文件
 
@@ -28,10 +29,9 @@ description: 开发XHL Tools工具箱的新工具。当用户要添加新工具�
 - 浏览器 API 放在 `onMounted` 钩子中
 - 确保组件在 Node.js 环境下可运行
 
-### 3. 注册路由
+### 3. 注册路由（两处）
 
-在 `src/router/index.ts` 的对应分类路由中添加:
-
+**① `src/router/index.ts`** - 添加路由配置:
 ```typescript
 {
   path: 'your-tool-name',
@@ -44,6 +44,21 @@ description: 开发XHL Tools工具箱的新工具。当用户要添加新工具�
   }
 }
 ```
+
+**② `src/constants/tool-routes.json`** - 添加 SEO/sitemap 配置:
+```json
+{
+  "path": "/tools/your-tool-name",
+  "title": "工具名称",
+  "description": "工具描述",
+  "icon": "ToolOutlined",
+  "category": "category-tool",
+  "priority": "0.7",
+  "changefreq": "monthly"
+}
+```
+
+> `priority` 影响 SEO 排名(1.0 最高)，`changefreq` 告诉搜索引擎更新频率
 
 ### 4. 添加图标(如需)
 

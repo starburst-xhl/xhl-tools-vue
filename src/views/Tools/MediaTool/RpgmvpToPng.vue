@@ -110,13 +110,6 @@ async function handleFileTransform() {
     </div>
     <a-checkbox v-model:checked="pack">打包下载</a-checkbox>
     <a-button type="primary" @click="handleFileTransform">转换并下载</a-button>
-    <!--    <div class="github-link">-->
-    <!--      <p>请访问项目的 GitHub 仓库以获取更多信息和源代码:</p>-->
-    <!--      <a href="https://github.com/DrRyanHuang/rpgmvp2png" target="_blank"-->
-    <!--      >https://github.com/DrRyanHuang/rpgmvp2png</a-->
-    <!--      >-->
-    <!--    </div>-->
-    <!--    <div class="footer">&copy; 2024 RPG Maker MV 文件转换工具</div>-->
   </div>
 </template>
 

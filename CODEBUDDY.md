@@ -78,7 +78,7 @@ src/
 ├── router/index.ts      # Route definitions (exports `routes` array)
 ├── views/               # Page components
 │   ├── HomePage.vue     # Landing page
-│   └── Tools/           # Tool pages (9 tool components)
+│   └── Tools/           # Tool pages (12 tool routes)
 ├── components/          # Reusable components
 │   ├── HeadBar.vue      # Top navigation
 │   └── SideMenuPage.vue # Side navigation for tools
@@ -86,19 +86,48 @@ src/
 ├── utils/               # Utility functions
 │   ├── menu_utils.ts    # Menu generation helpers
 │   ├── string_utils.ts  # String manipulation
+│   ├── seo_utils.ts     # SEO meta tags and sitemap data
 │   └── Tools/           # Tool-specific utilities
 └── constants/           # Static constants
+    └── tool-routes.json # Tool route config (SEO & sitemap)
 ```
 
 ## Important Development Patterns
 
 ### Working with Routes
 
-When adding new routes:
-1. Add route definition in `src/router/index.ts` to the `routes` array
-2. Use dynamic import: `component: () => import('@/views/NewPage.vue')`
-3. Include `meta: { title: 'Page Title' }` for navigation display
-4. Routes are automatically rendered as static HTML during build
+When adding new tools, you need to update TWO places:
+
+**1. Route Definition (`src/router/index.ts`)** - for page rendering:
+```typescript
+{
+  path: 'your-tool',
+  name: 'YourTool',
+  component: () => import('@/views/Tools/YourTool.vue'),
+  meta: {
+    title: 'Your Tool Title',
+    icon: 'IconName',
+    description: 'Tool description for SEO'
+  }
+}
+```
+
+**2. Tool Route Config (`src/constants/tool-routes.json`)** - for SEO & sitemap:
+```json
+{
+  "path": "/tools/your-tool",
+  "title": "Your Tool Title",
+  "description": "Tool description",
+  "icon": "IconName",
+  "category": "category-name",
+  "priority": "0.7",
+  "changefreq": "monthly"
+}
+```
+
+> Note: `priority` affects SEO ranking (1.0=highest), `changefreq` tells search engines update frequency.
+
+Routes are automatically rendered as static HTML during build, and sitemap is generated from `tool-routes.json`.
 
 ### Working with SSR/SSG
 
