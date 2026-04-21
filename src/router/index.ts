@@ -140,6 +140,23 @@ export const routes = [
               }
             ],
           },
+          {
+            path: 'mock-tool',
+            name: 'MockTool',
+            meta: {title: 'Mock工具'},
+            children: [
+              {
+                path: 'mock-data-generator',
+                name: 'MockDataGenerator',
+                component: () => import('@/views/Tools/MockTool/MockDataGenerator.vue'),
+                meta: {
+                  title: 'Mock数据生成',
+                  icon: 'DatabaseOutlined',
+                  description: '生成Mock测试数据，支持姓名、身份证、邮箱、手机等预置字段，以及数字、字符串、单多选、布尔值等自定义字段'
+                }
+              }
+            ]
+          },
         ]
       }
     ]
