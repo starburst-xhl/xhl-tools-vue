@@ -115,6 +115,18 @@ onUnmounted(() => {
   font-family: 'Courier New', monospace;
 }
 
+@media (max-width: 768px) {
+  .timer-tool__time {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .timer-tool__time {
+    font-size: 28px;
+  }
+}
+
 .timer-tool__button-group {
   display: flex;
   justify-content: center;

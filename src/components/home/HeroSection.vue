@@ -100,7 +100,6 @@ const goToTools = () => {
   color: var(--color-primary);
   font-weight: var(--font-weight-medium);
   box-shadow: var(--shadow-sm);
-  animation: slideDown 0.6s var(--easing-standard);
 }
 
 .badge-icon {
@@ -113,7 +112,6 @@ const goToTools = () => {
   color: var(--color-text-title);
   margin-bottom: var(--spacing-xl);
   line-height: var(--line-height-heading);
-  animation: slideUp 0.8s var(--easing-decelerate);
 }
 
 .highlight {
@@ -126,7 +124,6 @@ const goToTools = () => {
   color: var(--color-text-secondary);
   line-height: var(--line-height-body);
   margin-bottom: var(--spacing-xxxl);
-  animation: slideUp 0.8s var(--easing-decelerate) 0.2s both;
 }
 
 .hero-actions {
@@ -134,7 +131,6 @@ const goToTools = () => {
   gap: var(--spacing-md);
   justify-content: center;
   flex-wrap: wrap;
-  animation: slideUp 0.8s var(--easing-decelerate) 0.4s both;
 }
 
 .hero-btn {
