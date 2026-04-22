@@ -71,7 +71,7 @@ const theme = {
 
 <style scoped>
 .app-header {
-  background-color: var(--color-bg-component);
+  background-color: var(--color-bg-component) !important;
   border-bottom: 1px solid var(--color-border-light);
   padding: 0;
   height: 64px;

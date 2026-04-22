@@ -6,6 +6,9 @@
  */
 
 :root {
+  /* 强制浅色模式，禁止浏览器自动反转颜色 */
+  color-scheme: light only;
+
   /* ========== 主色系统 ========== */
   --color-primary: #ff9b17;
   --color-primary-light: #ffb84d;
