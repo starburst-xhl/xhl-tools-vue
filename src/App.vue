@@ -6,6 +6,7 @@ import 'dayjs/locale/zh-cn';
 import HeadBar from "@/components/HeadBar.vue";
 import { computed } from "vue";
 import { usePageSeo } from "@/utils/seo_utils";
+import { StyleProvider } from 'ant-design-vue/es/_util/cssinjs';
 
 dayjs.locale('zh-cn');
 const locale = zhCN;
@@ -53,16 +54,18 @@ const theme = {
 
 <template>
   <a-config-provider :locale="locale" :theme="theme">
-    <a-app class="full-size">
-      <a-layout class="full-size">
-        <a-layout-header class="app-header">
-          <head-bar :routes="rootRoutes"/>
-        </a-layout-header>
-        <a-layout class="app-content">
-          <router-view/>
+    <StyleProvider :ssr="true">
+      <a-app class="full-size">
+        <a-layout class="full-size">
+          <a-layout-header class="app-header">
+            <head-bar :routes="rootRoutes"/>
+          </a-layout-header>
+          <a-layout class="app-content">
+            <router-view/>
+          </a-layout>
         </a-layout>
-      </a-layout>
-    </a-app>
+      </a-app>
+    </StyleProvider>
   </a-config-provider>
 </template>
 
