@@ -2,7 +2,7 @@
   "name": "xhl-tools-vue",
   "version": "0.0.0",
   "private": true,
-  "license": "GPL-3.0-or-later",
+  "license": "AGPL-3.0",
   "type": "module",
   "scripts": {
     "dev": "vite --open",
