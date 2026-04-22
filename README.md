@@ -58,7 +58,6 @@ XHL Tools 提供多类实用的在线工具，所有操作均在浏览器本地�
 | 工具库 | [crypto-js](https://www.npmjs.com/package/crypto-js)、[fuse.js](https://www.npmjs.com/package/fuse.js)、[jszip](https://www.npmjs.com/package/jszip) |
 | 测试 | [Vitest](https://vitest.dev/) + [@vue/test-utils](https://test-utils.vuejs.org/) |
 | 部署 | [GitHub Pages](https://pages.github.com/)（自定义域名 `tools.xhcy.cc`） |
-| Node 管理 | [fnm](https://github.com/Schniz/fnm)（Fast Node Manager） |
 
 ---
 
@@ -109,19 +108,8 @@ vue-test/
 
 ### 环境要求
 
-- **Node.js**：22.x（通过 fnm 管理）
+- **Node.js**：22.x
 - **npm**：随 Node 22 安装
-
-### 安装 fnm 并切换 Node 版本
-
-```bash
-# 安装 fnm（如已安装可跳过）
-# Windows: 参考 https://github.com/Schniz/fnm#installation
-
-# 切换到 Node 22
-fnm install 22
-fnm use 22
-```
 
 ### 安装依赖
 
@@ -273,7 +261,7 @@ ssr: {
 
 1. Fork 本仓库
 2. 创建功能分支：`git checkout -b feature/your-feature`
-3. 确保使用 Node 22：`fnm use 22`
+3. 确保使用 Node 22
 4. 提交更改：`git commit -m 'Add some feature'`
 5. 推送分支：`git push origin feature/your-feature`
 6. 提交 Pull Request
