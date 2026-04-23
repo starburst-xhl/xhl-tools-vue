@@ -6,12 +6,14 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueDevTools from 'vite-plugin-vue-devtools'
+import Components from 'unplugin-vue-components/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 
 const require = createRequire(import.meta.url)
 // 在 ESM 环境中通过 createRequire 加载 antdv CJS 模块
 const { extractStyle } = require('ant-design-vue/lib/_util/cssinjs')
 
-// https://vite.dev/config/
 export default defineConfig({
   // 自定义域名 tools.xhcy.cc，无需子路径
   base: '/',
@@ -20,6 +22,20 @@ export default defineConfig({
     vueJsx(),
     // 仅在开发环境启用 devtools
     process.env.NODE_ENV === 'development' ? vueDevTools() : null,
+    // 自动按需引入组件
+    Components({
+      resolvers: [
+        AntDesignVueResolver({
+          // 使用 CSS-in-JS 方式（保持与 SSR 兼容）
+          importStyle: 'css-in-js',
+        }),
+      ],
+    }),
+    // 自动按需引入 API（ref, computed, watch 等）
+    AutoImport({
+      imports: ['vue', 'vue-router', 'pinia'],
+      dts: 'src/auto-imports.d.ts',
+    }),
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -33,8 +49,6 @@ export default defineConfig({
       const cache = appCtx.initialState?.antdCache
       if (cache) {
         // extractStyle(cache, false) 返回 <style> 标签包裹的 HTML 字符串
-        // extractStyle(cache, true) 返回纯 CSS 文本（不含 <style> 标签）
-        // 这里需要用 false（默认值），确保样式被 <style> 标签包裹
         const styleContent = extractStyle(cache)
         if (styleContent) {
           return renderedHTML.replace('</head>', `${styleContent}</head>`)

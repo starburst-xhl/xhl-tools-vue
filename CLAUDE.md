@@ -1,4 +1,4 @@
-# CLAUDE.md
+# CLAUDE.md This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -43,7 +43,8 @@ The project uses **vite-ssg** for static site generation. Key architectural deci
 **Entry Point (src/main.ts)**:
 - Uses `ViteSSG()` function instead of standard Vue app creation
 - Exports `createApp` for server-side rendering during build
-- Registers Pinia and Ant Design Vue as plugins in the initialization hook
+- Registers Pinia as plugin in the initialization hook
+- Ant Design Vue components are auto-imported on-demand via `unplugin-vue-components`
 - Routes are passed to ViteSSG, not registered to router instance
 
 **Router Configuration (src/router/index.ts)**:
@@ -147,9 +148,19 @@ Routes are automatically rendered as static HTML during build, and sitemap is ge
 - If a package fails during SSG build, add it to `ssr.noExternal` array in `vite.config.ts`
 - Common culprits: UI libraries, packages using `window`/`document`
 
+**Auto Import**:
+- Components use `unplugin-vue-components` for automatic on-demand import
+- Vue APIs (ref, computed, watch, etc.) auto-imported via `unplugin-auto-import`
+- Type declarations generated at `src/auto-imports.d.ts` and `components.d.ts`
+- These files should be committed to git for team consistency
+
 ### SSG Build Warnings
 
 The warning "Build process still running after 15s. Force exit" is expected and harmless. It occurs because Node.js event loop doesn't exit cleanly after rendering. The build completes successfully with exit code 0.
+
+### SSR CSS-in-JS Style Extraction
+
+Ant Design Vue uses CSS-in-JS. To prevent flash of unstyled content (FOUC), styles are extracted and inlined into HTML during SSR build. This causes larger HTML file sizes but ensures consistent rendering.
 
 ## Node.js Environment
 
