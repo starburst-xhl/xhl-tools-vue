@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://starburst-xhl.github.io/xhl-tools-vue/sitemap.xml
+Sitemap: https://tools.xhcy.cc/sitemap.xml
 
 # Crawl-delay (optional, be considerate to the host)
 Crawl-delay: 10
