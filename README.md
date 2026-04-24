@@ -64,7 +64,7 @@ XHL Tools 提供多类实用的在线工具，所有操作均在浏览器本地�
 ## 目录结构
 
 ```
-vue-test/
+xhl-tools-vue/
 ├── public/                  # 静态资源（favicon.ico、robots.txt）
 ├── scripts/                 # 构建脚本（sitemap 生成）
 ├── src/
