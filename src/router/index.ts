@@ -28,6 +28,7 @@ export const routes = [
           },
           {
             path: 'codec-tool',
+            name: 'CodecTool',
             meta: {title: '编解码工具'},
             children: [
               {

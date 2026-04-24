@@ -1,4 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router'
+import type { FunctionalComponent } from 'vue';
+import type { AntdIconProps } from '@ant-design/icons-vue/lib/components/AntdIcon';
 import {
   AppstoreOutlined,
   CodeOutlined,
@@ -33,9 +35,19 @@ export interface Tool {
 }
 
 /**
+ * 扩展的路由元数据（用于 SideMenuPage 中的类型断言）
+ */
+export interface ExtendedRouteMeta {
+  title?: string
+  icon?: string
+  description?: string
+  source?: ToolSource
+}
+
+/**
  * 图标映射表
  */
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, FunctionalComponent<AntdIconProps>> = {
   AppstoreOutlined,
   CodeOutlined,
   QrcodeOutlined,

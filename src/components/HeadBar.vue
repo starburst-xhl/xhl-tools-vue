@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { type RouteRecordRaw, useRoute, useRouter } from "vue-router";
+import { type RouteRecordRaw, useRoute } from "vue-router";
 import { badString } from "@/utils/string_utils.ts";
 import { GithubOutlined } from "@ant-design/icons-vue";
-
-const router = useRouter();
 
 defineProps<{
   routes: RouteRecordRaw[];
@@ -20,10 +18,6 @@ const routeCurrent = computed(() => {
     return name;
   }
 });
-
-const handleMenuSelect = (params: { key: string }) => {
-  router.push({ name: params.key });
-};
 
 watch(route, () => {
   const name = routeCurrent.value
@@ -45,14 +39,15 @@ watch(route, () => {
         v-model:selectedKeys="currentItem"
         mode="horizontal"
         class="head-bar__menu"
-        @click="handleMenuSelect"
       >
-        <a-menu-item 
-          v-for="route in routes" 
+        <a-menu-item
+          v-for="route in routes"
           :key="route.name"
           class="head-bar__menu-item"
         >
-          {{ route.meta?.title ?? '-' }}
+          <router-link :to="{ name: route.name }" class="head-bar__menu-link">
+            {{ route.meta?.title ?? '-' }}
+          </router-link>
         </a-menu-item>
       </a-menu>
     </div>
@@ -124,6 +119,11 @@ watch(route, () => {
 
 .head-bar__menu-item:hover {
   color: var(--color-primary);
+}
+
+.head-bar__menu-link {
+  color: inherit;
+  text-decoration: none;
 }
 
 .head-bar__right {

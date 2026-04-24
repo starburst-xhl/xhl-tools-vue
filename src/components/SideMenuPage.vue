@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import { onMounted, ref, computed, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import type { MenuItemType } from "ant-design-vue/es/menu/src/interface";
-import { routeToMenuItems } from "@/utils/menu_utils.ts";
+import { useRoute } from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
 import { getIconComponent } from "@/utils/tool_utils";
 import { MenuUnfoldOutlined } from '@ant-design/icons-vue';
+import MenuItems from './MenuItems.vue';
+import type { ExtendedRouteMeta } from '@/utils/tool_utils';
 
-const router = useRouter();
 const route = useRoute();
 
 const selectedKeys = ref<string[]>([]);
-const openKeys = ref([]) as any;
-const items = ref<MenuItemType[]>([]);
+const openKeys = ref<string[]>([]);
+const menuRoutes = ref<RouteRecordRaw[]>([]);
 const collapsed = ref(false);
 const isMobile = ref(false);
 const pageContentRef = ref<HTMLElement | null>(null);
 
 // 当前路由的 meta 信息
 const currentMeta = computed(() => route.meta);
-const currentIcon = computed(() => 
+const currentIcon = computed(() =>
   currentMeta.value?.icon ? getIconComponent(currentMeta.value.icon as string) : null
 );
 
@@ -27,9 +27,10 @@ function initItems() {
   const matchedRecords = route.matched;
   // 如果有至少两个层级，则获取二级路由
   const currentSecondLevelRoute = matchedRecords.length > 1 ? matchedRecords[1] : null;
-  if (currentSecondLevelRoute) {
-    items.value = routeToMenuItems(currentSecondLevelRoute.children);
+  if (currentSecondLevelRoute && currentSecondLevelRoute.children) {
+    menuRoutes.value = currentSecondLevelRoute.children;
     updateSelectedKeys();
+    updateOpenKeys();
   }
 }
 
@@ -42,18 +43,22 @@ function updateSelectedKeys() {
   }
 }
 
-function handleMenuClick(params: { key: string }) {
-  router.push({ name: params.key });
-  // 移动端点击菜单后自动收起
-  if (isMobile.value) {
-    collapsed.value = true;
-  }
+// 更新展开的 SubMenu keys
+function updateOpenKeys() {
+  const matchedRecords = route.matched;
+  // 找出所有有子路由的父路由名称
+  const parentNames = matchedRecords
+    .slice(0, -1) // 排除最后一个（当前路由）
+    .filter(r => r.children?.length)
+    .map(r => r.name as string);
+  openKeys.value = parentNames;
 }
 
 // 点击来源标签
 function handleSourceClick() {
-  if (currentMeta.value?.source && (currentMeta.value.source as any).url) {
-    window.open((currentMeta.value.source as any).url, '_blank', 'noopener,noreferrer');
+  const source = currentMeta.value?.source as ExtendedRouteMeta['source'];
+  if (source?.url) {
+    window.open(source.url, '_blank', 'noopener,noreferrer');
   }
 }
 
@@ -84,6 +89,7 @@ watch(
   () => route.name,
   () => {
     updateSelectedKeys();
+    updateOpenKeys();
     resetScrollPosition();
   }
 );
@@ -92,6 +98,10 @@ onMounted(() => {
   initItems();
   checkMobile();
   window.addEventListener('resize', checkMobile);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
 });
 </script>
 
@@ -110,10 +120,10 @@ onMounted(() => {
         v-model:openKeys="openKeys"
         v-model:selectedKeys="selectedKeys"
         mode="inline"
-        :items="items"
-        @click="handleMenuClick"
         class="side-menu__navigation"
-      />
+      >
+        <MenuItems :routes="menuRoutes" />
+      </a-menu>
     </div>
   </a-layout-sider>
 
