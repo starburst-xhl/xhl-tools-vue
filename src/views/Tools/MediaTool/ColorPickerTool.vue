@@ -133,7 +133,7 @@ const copyToClipboard = async (text: string, format: string) => {
   try {
     await navigator.clipboard.writeText(text);
     message.success(`${format}已复制`);
-  } catch (err) {
+  } catch {
     message.error("复制失败");
   }
 };
@@ -142,7 +142,7 @@ const copyToClipboard = async (text: string, format: string) => {
 const copyColor = async (format: 'hex' | 'rgb' | 'rgba' | 'hsl') => {
   let text = "";
   const rgb = hexToRgb(currentColor.value);
-  
+
   switch (format) {
     case "hex":
       text = currentColor.value;
@@ -157,7 +157,7 @@ const copyColor = async (format: 'hex' | 'rgb' | 'rgba' | 'hsl') => {
       text = getHslString();
       break;
   }
-  
+
   if (text) {
     await copyToClipboard(text, format.toUpperCase());
   }

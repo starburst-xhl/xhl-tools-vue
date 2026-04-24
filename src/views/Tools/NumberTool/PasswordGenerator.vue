@@ -51,7 +51,7 @@ const copyPassword = async () => {
   try {
     await clipboard.value.writeText(password.value);
     message.success('密码已复制到剪贴板');
-  } catch (error) {
+  } catch {
     message.error('复制失败');
   }
 };
@@ -183,9 +183,9 @@ onMounted(() => {
   height: 64px;
   margin-bottom: 24px;
   padding: 0 32px;
-  border-radius: 8px;
-  color: #ff9b17;
-  font-weight: 600;
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
   font-family: 'Courier New', monospace;
 }
 
@@ -210,8 +210,8 @@ onMounted(() => {
 }
 
 .symbol-selector__hint {
-  font-size: 12px;
-  color: #999;
+  font-size: var(--font-size-caption-sm);
+  color: var(--color-text-tertiary);
 }
 
 .symbol-selector__actions {
@@ -240,15 +240,15 @@ onMounted(() => {
 }
 
 .symbol-tag--selected {
-  border: 2px solid #ff9b17;
-  background-color: #fff7e6;
-  color: #ff9b17;
+  border: 2px solid var(--color-primary);
+  background-color: var(--color-primary-bg);
+  color: var(--color-primary);
 }
 
 .symbol-tag--unselected {
-  border: 1px solid #d9d9d9;
+  border: 1px solid var(--color-border);
   background-color: transparent;
-  color: #999;
+  color: var(--color-text-tertiary);
 }
 
 .symbol-selector__count {

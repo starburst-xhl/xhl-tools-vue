@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
 import type { Tool } from '@/utils/tool_utils'
 import { getIconComponent } from '@/utils/tool_utils'
 
@@ -8,30 +7,23 @@ const props = defineProps<{
   tool: Tool
 }>()
 
-const router = useRouter()
-
 // 获取图标组件
 const IconComponent = computed(() => getIconComponent(props.tool.icon))
-
-// 点击卡片跳转
-function handleClick() {
-  router.push({ name: props.tool.name })
-}
 </script>
 
 <template>
-  <div class="tool-card" @click="handleClick">
+  <router-link :to="{ name: tool.name }" class="tool-card">
     <div class="tool-card__icon-wrapper">
       <component :is="IconComponent" class="tool-card__icon" />
     </div>
-    
+
     <div class="tool-card__content">
       <h3 class="tool-card__title">
         {{ tool.title }}
       </h3>
       <p class="tool-card__description">{{ tool.description }}</p>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <style scoped>
@@ -40,18 +32,25 @@ function handleClick() {
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   cursor: pointer;
-  transition: var(--transition-normal);
   border: 1px solid var(--color-border-light);
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: var(--spacing-lg);
+  text-decoration: none;
+  color: inherit;
 }
 
+/* 悬浮：扁平化设计，边框加粗变色 */
 .tool-card:hover {
-  transform: translateX(4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0px var(--color-primary-bg), 0 0 0 1.5px var(--color-primary);
+  color: inherit;
+}
+
+/* 键盘焦点：box-shadow 实现轮廓，自然贴合 border-radius */
+.tool-card:focus-visible {
+  box-shadow: 0 0 0 0px var(--color-primary-bg), 0 0 0 1.5px var(--color-primary);
+  color: inherit;
 }
 
 .tool-card__icon-wrapper {
@@ -61,11 +60,6 @@ function handleClick() {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: var(--transition-normal);
-}
-
-.tool-card:hover .tool-card__icon-wrapper {
-  transform: scale(1.05);
 }
 
 .tool-card__icon {

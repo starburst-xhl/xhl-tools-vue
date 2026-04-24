@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import Fuse from 'fuse.js'
 import ToolCard from '@/components/tools/ToolCard.vue'
 import { extractToolsFromRoutes, type Tool } from '@/utils/tool_utils'
@@ -9,29 +9,26 @@ const searchQuery = ref('')
 const allTools = ref<Tool[]>([])
 let fuseInstance: Fuse<Tool> | null = null
 
-// 提取所有工具
-onMounted(() => {
-  // 找到 /tools 路由（它是根路由的子路由）
-  const rootRoute = routes.find((r) => r.path === '/')
-  if (rootRoute && rootRoute.children) {
-    const toolsRoute = rootRoute.children.find((r) => r.path === '/tools')
-    if (toolsRoute && toolsRoute.children) {
-      // 提取所有工具，排除工具首页本身
-      allTools.value = extractToolsFromRoutes(toolsRoute.children).filter(
-        (tool) => tool.name !== 'ToolHome'
-      )
+// 提取所有工具（移到 setup 阶段，确保 SSR 也能渲染）
+const rootRoute = routes.find((r) => r.path === '/')
+if (rootRoute && rootRoute.children) {
+  const toolsRoute = rootRoute.children.find((r) => r.path === '/tools')
+  if (toolsRoute && toolsRoute.children) {
+    // 提取所有工具，排除工具首页本身
+    allTools.value = extractToolsFromRoutes(toolsRoute.children).filter(
+      (tool) => tool.name !== 'ToolHome'
+    )
 
-      // 初始化 Fuse.js
-      fuseInstance = new Fuse(allTools.value, {
-        keys: [
-          { name: 'title', weight: 0.6 },
-          { name: 'description', weight: 0.4 },
-        ],
-        threshold: 0.3,
-      })
-    }
+    // 初始化 Fuse.js
+    fuseInstance = new Fuse(allTools.value, {
+      keys: [
+        { name: 'title', weight: 0.6 },
+        { name: 'description', weight: 0.4 },
+      ],
+      threshold: 0.3,
+    })
   }
-})
+}
 
 // 过滤后的工具列表
 const filteredTools = computed(() => {

@@ -16,7 +16,7 @@ const scrollToSlide = (index: number) => {
   
   // 平滑滚动到指定幻灯片
   if (containerRef.value) {
-    const slideHeight = window.innerHeight;
+    const slideHeight = window.innerHeight - 64;
     containerRef.value.style.transform = `translateY(-${index * slideHeight}px)`;
   }
   
@@ -103,7 +103,7 @@ onUnmounted(() => {
 <style scoped>
 .home-page {
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 64px);
   overflow: hidden;
   position: relative;
   background: var(--color-bg);
@@ -117,7 +117,7 @@ onUnmounted(() => {
 
 .slide {
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 64px);
   display: flex;
   align-items: center;
   justify-content: center;

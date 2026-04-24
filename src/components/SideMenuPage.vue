@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, computed, watch } from "vue";
+import { onMounted, onUnmounted, ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import { getIconComponent } from "@/utils/tool_utils";
@@ -14,7 +14,11 @@ const openKeys = ref<string[]>([]);
 const menuRoutes = ref<RouteRecordRaw[]>([]);
 const collapsed = ref(false);
 const isMobile = ref(false);
+const isHydrated = ref(false);
 const pageContentRef = ref<HTMLElement | null>(null);
+
+// 侧边栏宽度：折叠时为 0，展开时为 240px
+const siderWidth = computed(() => collapsed.value ? '0px' : '240px');
 
 // 当前路由的 meta 信息
 const currentMeta = computed(() => route.meta);
@@ -23,9 +27,7 @@ const currentIcon = computed(() =>
 );
 
 function initItems() {
-  // 获取当前匹配的路由记录
   const matchedRecords = route.matched;
-  // 如果有至少两个层级，则获取二级路由
   const currentSecondLevelRoute = matchedRecords.length > 1 ? matchedRecords[1] : null;
   if (currentSecondLevelRoute && currentSecondLevelRoute.children) {
     menuRoutes.value = currentSecondLevelRoute.children;
@@ -34,7 +36,6 @@ function initItems() {
   }
 }
 
-// 更新选中项
 function updateSelectedKeys() {
   const matchedRecords = route.matched;
   const lastName = matchedRecords[matchedRecords.length - 1].name;
@@ -43,18 +44,15 @@ function updateSelectedKeys() {
   }
 }
 
-// 更新展开的 SubMenu keys
 function updateOpenKeys() {
   const matchedRecords = route.matched;
-  // 找出所有有子路由的父路由名称
   const parentNames = matchedRecords
-    .slice(0, -1) // 排除最后一个（当前路由）
+    .slice(0, -1)
     .filter(r => r.children?.length)
     .map(r => r.name as string);
   openKeys.value = parentNames;
 }
 
-// 点击来源标签
 function handleSourceClick() {
   const source = currentMeta.value?.source as ExtendedRouteMeta['source'];
   if (source?.url) {
@@ -62,7 +60,6 @@ function handleSourceClick() {
   }
 }
 
-// 检测是否为移动端
 function checkMobile() {
   isMobile.value = window.innerWidth < 768;
   if (isMobile.value) {
@@ -72,19 +69,16 @@ function checkMobile() {
   }
 }
 
-// 切换侧边栏
 function toggleSidebar() {
   collapsed.value = !collapsed.value;
 }
 
-// 重置滚动位置到顶部
 function resetScrollPosition() {
   if (pageContentRef.value) {
     pageContentRef.value.scrollTop = 0;
   }
 }
 
-// 监听路由变化，更新菜单选中状态并重置滚动位置
 watch(
   () => route.name,
   () => {
@@ -94,9 +88,11 @@ watch(
   }
 );
 
+initItems();
+
 onMounted(() => {
-  initItems();
   checkMobile();
+  isHydrated.value = true;
   window.addEventListener('resize', checkMobile);
 });
 
@@ -106,73 +102,96 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <a-layout-sider
-    v-model:collapsed="collapsed"
-    :trigger="null"
-    collapsible
-    :width="240"
-    :collapsed-width="0"
-    class="side-menu"
-    :class="{ 'side-menu--collapsed': collapsed }"
+  <div
+    class="side-menu-layout"
+    :class="{ 'side-menu-layout--hydrated': isHydrated }"
   >
-    <div class="side-menu__wrapper">
-      <a-menu
-        v-model:openKeys="openKeys"
-        v-model:selectedKeys="selectedKeys"
-        mode="inline"
-        class="side-menu__navigation"
-      >
-        <MenuItems :routes="menuRoutes" />
-      </a-menu>
-    </div>
-  </a-layout-sider>
+    <!-- 侧边栏 -->
+    <aside
+      class="side-menu"
+      :class="{ 'side-menu--collapsed': collapsed }"
+      :style="{ width: siderWidth }"
+    >
+      <div class="side-menu__wrapper">
+        <a-menu
+          v-model:openKeys="openKeys"
+          v-model:selectedKeys="selectedKeys"
+          mode="inline"
+          class="side-menu__navigation"
+        >
+          <MenuItems :routes="menuRoutes" />
+        </a-menu>
+      </div>
+    </aside>
 
-  <a-layout class="main-layout">
-    <!-- 菜单切换按钮 - 在菜单收起时显示 -->
-    <div v-if="collapsed" class="menu-toggle" @click="toggleSidebar">
-      <MenuUnfoldOutlined />
-    </div>
+    <!-- 主内容区 -->
+    <main class="main-layout">
+      <!-- 菜单切换按钮 -->
+      <div v-if="collapsed && isHydrated" class="menu-toggle" @click="toggleSidebar">
+        <MenuUnfoldOutlined />
+      </div>
 
-    <a-layout-content class="main-content">
-      <!-- 固定标题区 -->
-      <div class="page-header">
-        <div class="page-header__title-row">
-          <component
-            v-if="currentIcon"
-            :is="currentIcon"
-            class="page-header__icon"
-          />
-          <h2 class="page-header__title">{{ currentMeta?.title }}</h2>
+      <div class="main-content">
+        <!-- 固定标题区 -->
+        <div class="page-header">
+          <div class="page-header__title-row">
+            <component
+              v-if="currentIcon"
+              :is="currentIcon"
+              class="page-header__icon"
+            />
+            <h2 class="page-header__title">{{ currentMeta?.title }}</h2>
+          </div>
+
+          <p v-if="currentMeta?.description" class="page-header__description">
+            {{ currentMeta.description }}
+          </p>
+
+          <a-tag
+            v-if="currentMeta?.source"
+            color="orange"
+            class="page-header__source"
+            @click="handleSourceClick"
+          >
+            来源：{{ (currentMeta.source as any).name }}
+          </a-tag>
         </div>
 
-        <p v-if="currentMeta?.description" class="page-header__description">
-          {{ currentMeta.description }}
-        </p>
-
-        <a-tag
-          v-if="currentMeta?.source"
-          color="orange"
-          class="page-header__source"
-          @click="handleSourceClick"
-        >
-          来源：{{ (currentMeta.source as any).name }}
-        </a-tag>
+        <!-- 可滚动内容区 -->
+        <div ref="pageContentRef" class="page-content">
+          <router-view />
+        </div>
       </div>
-
-      <!-- 可滚动内容区 -->
-      <div ref="pageContentRef" class="page-content">
-        <router-view />
-      </div>
-    </a-layout-content>
-  </a-layout>
+    </main>
+  </div>
 </template>
 
 <style scoped>
+/* ========== 外层布局 ========== */
+.side-menu-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  background-color: var(--color-bg);
+}
+
+/* 水合完成前禁用所有 transition，避免 SSR → 客户端状态的闪烁 */
+.side-menu-layout:not(.side-menu-layout--hydrated) * {
+  transition: none !important;
+}
+
+.side-menu-layout:not(.side-menu-layout--hydrated) {
+  transition: none !important;
+}
+
+/* ========== 侧边栏 ========== */
 .side-menu {
   background: var(--color-bg-component);
   border-right: 1px solid var(--color-border-light);
   overflow: hidden;
-  transition: all 0.2s;
+  /* 仅对 width 做 transition，避免全属性过渡引发其他闪烁 */
+  transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
 }
 
 .side-menu--collapsed {
@@ -183,6 +202,8 @@ onUnmounted(() => {
   height: 100%;
   overflow-y: auto;
   padding: var(--spacing-md) 0;
+  /* width 固定 240px，防止内容区随侧边栏 width 收缩而挤压 */
+  width: 240px;
 }
 
 .side-menu__navigation {
@@ -190,12 +211,13 @@ onUnmounted(() => {
   height: 100%;
 }
 
+/* ========== 主内容区 ========== */
 .main-layout {
-  background-color: var(--color-bg);
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-width: 0; /* flex 子项防止内容溢出 */
 }
 
 .menu-toggle {
@@ -230,7 +252,7 @@ onUnmounted(() => {
   padding: var(--spacing-lg);
 }
 
-/* 页面标题区 - 固定 */
+/* ========== 页面标题区 ========== */
 .page-header {
   width: calc(100% - var(--spacing-md));
   max-width: 800px;
@@ -277,7 +299,7 @@ onUnmounted(() => {
   opacity: 0.8;
 }
 
-/* 页面内容区 */
+/* ========== 页面内容区 ========== */
 .page-content {
   width: calc(100% - var(--spacing-md));
   max-width: 800px;
@@ -296,5 +318,65 @@ onUnmounted(() => {
 
 .page-content::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 768px) {
+  .side-menu {
+    position: fixed;
+    left: 0;
+    top: 64px;
+    height: calc(100vh - 64px);
+    z-index: 100;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .side-menu--collapsed {
+    /* 折叠时用 translate 移出屏幕，而非 width=0（避免内容区挤压动画） */
+    width: 240px !important;
+    transform: translateX(-240px);
+  }
+
+  .main-layout {
+    width: 100%;
+  }
+
+  .main-content {
+    padding: var(--spacing-sm);
+    padding-top: 60px;
+  }
+
+  .page-header {
+    width: 100%;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+  }
+
+  .page-content {
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    max-height: calc(100vh - 64px - 240px);
+  }
+
+  .page-header__title {
+    font-size: var(--font-size-h3);
+  }
+}
+
+@media (max-width: 1024px) {
+  .main-content {
+    padding: var(--spacing-md);
+  }
+
+  .page-header {
+    padding: var(--spacing-lg);
+  }
+
+  .page-content {
+    padding: var(--spacing-lg);
+    max-height: calc(100vh - 64px - 220px);
+  }
 }
 </style>
