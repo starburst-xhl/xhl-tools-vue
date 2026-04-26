@@ -140,7 +140,7 @@ onUnmounted(() => {
               :is="currentIcon"
               class="page-header__icon"
             />
-            <h2 class="page-header__title">{{ currentMeta?.title }}</h2>
+            <h1 class="page-header__title">{{ currentMeta?.title }}</h1>
           </div>
 
           <p v-if="currentMeta?.description" class="page-header__description">
