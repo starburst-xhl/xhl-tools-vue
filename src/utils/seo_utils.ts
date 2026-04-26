@@ -4,8 +4,7 @@
  */
 import { useHead } from '@unhead/vue'
 import { useRoute } from 'vue-router'
-import { computed, watch } from 'vue'
-import { toolRoutes } from '@/constants/tool-routes'
+import { computed } from 'vue'
 
 const BASE_URL = 'https://tools.xhcy.cc'
 const SITE_NAME = 'XHL Tools'
@@ -62,23 +61,5 @@ export function usePageSeo() {
         { rel: 'canonical', href: `${BASE_URL}${route.path}` },
       ],
     }
-  }))
-
-  // 监听路由变化，确保及时更新
-  watch(() => route.path, () => {
-    // useHead 会自动追踪 computed 的变化，这里不需要额外处理
-  })
-}
-
-/**
- * 获取所有页面的 SEO 数据（用于生成 sitemap）
- * 从 toolRoutes 动态读取，不再需要手动维护
- */
-export function getAllPagesSeo() {
-  return toolRoutes.map(route => ({
-    path: route.path,
-    title: route.title,
-    description: route.description,
-    url: `${BASE_URL}${route.path}`,
   }))
 }

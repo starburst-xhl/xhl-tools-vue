@@ -9,6 +9,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
+import generateRoutesPlugin from './scripts/vite-plugin-generate-routes'
 
 const require = createRequire(import.meta.url)
 // 在 ESM 环境中通过 createRequire 加载 antdv CJS 模块
@@ -20,6 +21,8 @@ export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
+    // 自动从 tool-routes.json 生成路由配置
+    generateRoutesPlugin(),
     // 仅在开发环境启用 devtools
     process.env.NODE_ENV === 'development' ? vueDevTools() : null,
     // 自动按需引入组件

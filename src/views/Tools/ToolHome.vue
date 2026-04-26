@@ -60,6 +60,7 @@ const statsText = computed(() => {
         placeholder="搜索工具..."
         size="large"
         allow-clear
+        autofocus
         class="search-input"
       />
     </div>

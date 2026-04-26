@@ -9,7 +9,7 @@
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "test:unit": "vitest",
-    "build-only": "vite-ssg build && node -e \"require('fs').writeFileSync('dist/.nojekyll', '')\" && node scripts/generate-sitemap.js",
+    "build-only": "vite-ssg build && node -e \"require('fs').writeFileSync('dist/.nojekyll', '')\" && npx tsx scripts/generate-sitemap.ts",
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix",
     "deploy": "gh-pages -d dist --dotfiles"
