@@ -6,7 +6,7 @@ import { GithubOutlined } from '@ant-design/icons-vue';
 const router = useRouter();
 
 const goToTools = () => {
-  router.push({ name: 'tools' });
+  router.push({ name: 'Tools' });
 };
 </script>
 
@@ -17,21 +17,21 @@ const goToTools = () => {
         <ToolOutlined class="badge-icon" />
         <span>开源工具集合</span>
       </div>
-      
+
       <h1 class="hero-title">
         XHL Tools - 高效便捷的<br>
         <span class="highlight">在线工具箱</span>
       </h1>
-      
+
       <p class="hero-description">
         提供编解码、加密解密、数字工具、媒体处理等多种实用工具，
         无需安装，即开即用，助你提升工作效率
       </p>
-      
+
       <div class="hero-actions">
-        <a-button 
-          type="primary" 
-          size="large" 
+        <a-button
+          type="primary"
+          size="large"
           class="hero-btn hero-btn--primary"
           @click="goToTools"
         >
@@ -40,11 +40,11 @@ const goToTools = () => {
           </template>
           立即开始
         </a-button>
-        
-        <a-button 
-          size="large" 
+
+        <a-button
+          size="large"
           class="hero-btn hero-btn--secondary"
-          href="https://github.com/starburst-xhl/xhl-tools-vue" 
+          href="https://github.com/starburst-xhl/xhl-tools-vue"
           target="_blank"
         >
           <template #icon>
@@ -177,15 +177,15 @@ const goToTools = () => {
     height: 100vh;
     padding: var(--spacing-xxxxl) var(--spacing-md);
   }
-  
+
   .hero-title {
     font-size: var(--font-size-h1);
   }
-  
+
   .hero-description {
     font-size: var(--font-size-body);
   }
-  
+
   .hero-badge {
     font-size: var(--font-size-caption);
     padding: var(--spacing-xs) var(--spacing-sm);

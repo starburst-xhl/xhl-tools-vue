@@ -6,23 +6,33 @@
 import { writeFileSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-const BASE_URL = 'https://tools.xhcy.cc'
+// 从环境变量读取
+const BASE_URL = process.env.VITE_BASE_URL || 'https://tools.xhcy.cc'
 const today = new Date().toISOString().split('T')[0]
+const DEFAULT_DESCRIPTION = '开源免费的工具集合网站'
 
 const toolRoutesPath = join(process.cwd(), 'src', 'constants', 'tool-routes.json')
+
+interface RouteMeta {
+  title?: string
+  icon?: string
+  description?: string
+  seoDescription?: string
+}
 
 interface RouteConfig {
   path: string
   changefreq?: string
   priority?: string
+  meta?: RouteMeta
   children?: RouteConfig[]
 }
 
 /**
  * 递归展平嵌套路由，收集所有叶子节点的 path
  */
-function flattenRoutes(routes: RouteConfig[], parentPath = ''): { path: string; changefreq: string; priority: string }[] {
-  const urls: { path: string; changefreq: string; priority: string }[] = []
+function flattenRoutes(routes: RouteConfig[], parentPath = ''): { path: string; changefreq: string; priority: string; description: string }[] {
+  const urls: { path: string; changefreq: string; priority: string; description: string }[] = []
 
   for (const route of routes) {
     const fullPath = parentPath ? `${parentPath}/${route.path.replace(/^\//, '')}` : route.path
@@ -32,10 +42,13 @@ function flattenRoutes(routes: RouteConfig[], parentPath = ''): { path: string; 
       urls.push(...flattenRoutes(route.children, fullPath))
     } else {
       // 叶子节点，添加到 sitemap
+      // 优先使用 seoDescription，否则使用 description
+      const description = route.meta?.seoDescription || route.meta?.description || DEFAULT_DESCRIPTION
       urls.push({
         path: fullPath,
         changefreq: route.changefreq || 'monthly',
-        priority: route.priority || '0.5'
+        priority: route.priority || '0.5',
+        description
       })
     }
   }

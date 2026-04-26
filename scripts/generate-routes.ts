@@ -12,13 +12,16 @@ interface RouteMeta {
   title?: string
   icon?: string
   description?: string
+  seoDescription?: string
+  source?: {
+    name: string
+    url?: string
+  }
 }
 
 interface RouteConfig {
   path: string
   name?: string
-  title?: string
-  description?: string
   redirect?: string
   component?: string
   meta?: RouteMeta
@@ -32,6 +35,46 @@ interface BuiltRoute {
   component?: string
   meta?: RouteMeta
   children?: BuiltRoute[]
+}
+
+/**
+ * 计算字符串的字节长度（汉字占2个字节）
+ */
+function getByteLength(str: string): number {
+  return str.replace(/[^\x00-\xff]/g, 'xx').length
+}
+
+/**
+ * 校验 seoDescription 长度（100-150字符，汉字占2字节）
+ */
+function validateSeoDescriptions(routes: RouteConfig[]): void {
+  const warnings: string[] = []
+  const MIN_LEN = 100
+  const MAX_LEN = 150
+
+  function check(route: RouteConfig, path: string) {
+    const desc = route.meta?.seoDescription
+    if (!desc) {
+      // 如果没有 seoDescription，用 description 代替但发出警告
+      if (route.meta?.description) {
+        warnings.push(`⚠️ [${path}] seoDescription 未设置，已使用 description（将触发校验警告）`)
+      }
+    } else {
+      const byteLen = getByteLength(desc)
+      if (byteLen < MIN_LEN || byteLen > MAX_LEN) {
+        warnings.push(`⚠️ [${path}] seoDescription 长度需在${MIN_LEN}-${MAX_LEN}字符，当前: ${byteLen}字符（${desc.length}汉字）`)
+      }
+    }
+    route.children?.forEach(child => check(child, `${path}/${child.path}`))
+  }
+
+  routes.forEach(route => check(route, route.path))
+
+  if (warnings.length > 0) {
+    console.warn('\n🔔 SEO Description 校验警告:')
+    warnings.forEach(w => console.warn(w))
+    console.warn('')
+  }
 }
 
 /**
@@ -69,17 +112,8 @@ function buildRoutes(routes: RouteConfig[], parentPath = ''): BuiltRoute[] {
     }
 
     // 处理 meta
-    if (route.meta || route.description) {
+    if (route.meta) {
       result.meta = { ...route.meta }
-      if (route.description) {
-        result.meta!.description = route.description
-      }
-      if (route.title) {
-        result.meta!.title = route.title
-      }
-      if (route.meta?.icon) {
-        result.meta!.icon = route.meta.icon
-      }
     }
 
     // 递归处理 children
@@ -117,6 +151,13 @@ function routeToString(route: BuiltRoute, indent: number): string {
     if (route.meta.title) metaParts.push(`title: '${route.meta.title}'`)
     if (route.meta.icon) metaParts.push(`icon: '${route.meta.icon}'`)
     if (route.meta.description) metaParts.push(`description: '${route.meta.description}'`)
+    if (route.meta.seoDescription) metaParts.push(`seoDescription: '${route.meta.seoDescription}'`)
+    if (route.meta.source) {
+      const sourceParts: string[] = []
+      if (route.meta.source.name) sourceParts.push(`name: '${route.meta.source.name}'`)
+      if (route.meta.source.url) sourceParts.push(`url: '${route.meta.source.url}'`)
+      metaParts.push(`source: { ${sourceParts.join(', ')} }`)
+    }
     if (metaParts.length > 0) {
       parts.push(`meta: { ${metaParts.join(', ')} }`)
     }
@@ -147,6 +188,9 @@ export function generateRoutes(): boolean {
     console.error('❌ 未找到 tool-routes.json')
     return false
   }
+
+  // 校验 seoDescription 长度
+  validateSeoDescriptions(toolRoutes)
 
   const builtRoutes = buildRoutes(toolRoutes)
 
