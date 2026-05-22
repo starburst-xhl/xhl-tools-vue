@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
-import { message } from "ant-design-vue";
+import { copyToClipboard } from "@/utils/clipboard_utils";
 import { ReloadOutlined } from "@ant-design/icons-vue";
 
 // 当前颜色状态 - 默认橙色
@@ -129,13 +129,8 @@ const generateRandomColor = () => {
 };
 
 // 复制到剪贴板
-const copyToClipboard = async (text: string, format: string) => {
-  try {
-    await navigator.clipboard.writeText(text);
-    message.success(`${format}已复制`);
-  } catch {
-    message.error("复制失败");
-  }
+const copyColorText = async (text: string, format: string) => {
+  await copyToClipboard(text, `${format}已复制`, "复制失败");
 };
 
 // 复制当前颜色
@@ -159,7 +154,7 @@ const copyColor = async (format: 'hex' | 'rgb' | 'rgba' | 'hsl') => {
   }
 
   if (text) {
-    await copyToClipboard(text, format.toUpperCase());
+    await copyColorText(text, format.toUpperCase());
   }
 };
 </script>

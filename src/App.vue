@@ -83,6 +83,8 @@ const theme = {
 
 .app-content {
   background-color: var(--color-bg);
-  min-height: calc(100vh - 64px);
+  height: calc(100vh - 64px);
+  overflow: hidden;
+  min-height: 0; /* flex 子项允许收缩 */
 }
 </style>

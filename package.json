@@ -9,15 +9,17 @@
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "test:unit": "vitest",
-    "build-only": "vite-ssg build && node -e \"require('fs').writeFileSync('dist/.nojekyll', '')\" && npx tsx scripts/generate-sitemap.ts",
+    "build-only": "vite-ssg build && node -e \"import('fs').then(fs => fs.writeFileSync('dist/.nojekyll', ''))\" && npx tsx scripts/generate-sitemap.ts",
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix",
     "deploy": "gh-pages -d dist --dotfiles"
   },
   "dependencies": {
+    "@unhead/vue": "^2.1.0",
     "@types/crypto-js": "^4.2.2",
     "ant-design-vue": "^4.2.6",
     "crypto-js": "^4.2.0",
+    "dayjs": "^1.11.0",
     "fuse.js": "^7.0.0",
     "jszip": "^3.10.1",
     "pinia": "^2.3.0",

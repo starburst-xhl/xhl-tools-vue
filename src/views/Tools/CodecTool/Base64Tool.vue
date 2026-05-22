@@ -1,27 +1,29 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {DownOutlined, UpOutlined} from "@ant-design/icons-vue";
-import {notification} from "ant-design-vue";
+import {copyToClipboard} from "@/utils/clipboard_utils";
 
 const inputText = ref<string>('');
 const outputText = ref<string>('');
+
+// Unicode 安全的 Base64 编码
 const encode = () => {
-  outputText.value = btoa(inputText.value);
-  // 复制到剪贴板
-  navigator.clipboard.writeText(outputText.value);
-  notification.success({
-    message: '编码成功',
-    description: '已将编码后的文本复制到剪贴板',
-  });
+  try {
+    outputText.value = btoa(unescape(encodeURIComponent(inputText.value)));
+    copyToClipboard(outputText.value, '编码成功，已将结果复制到剪贴板');
+  } catch {
+    outputText.value = '';
+  }
 };
+
+// Unicode 安全的 Base64 解码
 const decode = () => {
-  inputText.value = atob(outputText.value);
-  // 复制到剪贴板
-  navigator.clipboard.writeText(outputText.value);
-  notification.success({
-    message: '解码成功',
-    description: '已将解码后的文本复制到剪贴板',
-  });
+  try {
+    inputText.value = decodeURIComponent(escape(atob(outputText.value)));
+    copyToClipboard(inputText.value, '解码成功，已将结果复制到剪贴板');
+  } catch {
+    inputText.value = '';
+  }
 };
 </script>
 

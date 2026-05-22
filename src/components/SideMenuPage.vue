@@ -173,6 +173,7 @@ onUnmounted(() => {
   flex: 1;
   overflow: hidden;
   background-color: var(--color-bg);
+  min-height: 0; /* flex 子项必须设置 min-height:0 才能让 overflow:hidden 生效 */
 }
 
 /* 水合完成前禁用所有 transition，避免 SSR → 客户端状态的闪烁 */
@@ -218,6 +219,7 @@ onUnmounted(() => {
   flex-direction: column;
   overflow: hidden;
   min-width: 0; /* flex 子项防止内容溢出 */
+  min-height: 0; /* flex 子项必须设置 min-height:0 才能让 overflow:hidden 生效 */
 }
 
 .menu-toggle {
@@ -250,6 +252,7 @@ onUnmounted(() => {
   flex-direction: column;
   overflow: hidden;
   padding: var(--spacing-lg);
+  min-height: 0; /* flex 子项必须设置 min-height:0 才能让 overflow:hidden 生效 */
 }
 
 /* ========== 页面标题区 ========== */

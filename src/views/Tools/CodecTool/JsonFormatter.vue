@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { message } from "ant-design-vue";
+import { copyToClipboard } from "@/utils/clipboard_utils";
 
 // 状态定义
 const inputValue = ref<string>("");
@@ -56,16 +57,9 @@ const resetForm = () => {
 // 复制结果
 const copyResult = async () => {
   if (!result.value) {
-    message.warning("没有可复制的内容");
     return;
   }
-
-  try {
-    await navigator.clipboard.writeText(result.value);
-    message.success("已复制到剪贴板");
-  } catch {
-    message.error("复制失败");
-  }
+  await copyToClipboard(result.value, "已复制到剪贴板");
 };
 </script>
 

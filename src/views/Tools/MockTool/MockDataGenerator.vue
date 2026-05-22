@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from "vue";
-import { message } from "ant-design-vue";
+import { copyToClipboard } from "@/utils/clipboard_utils";
 import { CopyOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 
 /**
@@ -271,12 +271,7 @@ const generateJson = () => {
 
 // 复制JSON
 const copyJson = async () => {
-  try {
-    await navigator.clipboard.writeText(generatedJson.value);
-    message.success('已复制到剪贴板');
-  } catch (error) {
-    message.error('复制失败');
-  }
+  await copyToClipboard(generatedJson.value, '已复制到剪贴板', '复制失败');
 };
 
 // 初始化默认字段

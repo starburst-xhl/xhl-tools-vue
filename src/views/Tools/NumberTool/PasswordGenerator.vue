@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import {computed, onMounted, reactive, ref, watch} from "vue";
 import {message} from "ant-design-vue";
+import {copyToClipboard} from "@/utils/clipboard_utils";
 import {badString} from "@/utils/string_utils.ts";
 import {CopyOutlined, RedoOutlined} from "@ant-design/icons-vue";
-
-const clipboard = computed(() => {
-  return navigator.clipboard;
-});
 
 // 预设的特殊字符集(完整集合)
 const PRESET_SYMBOLS = '!@#$%^&*()_+{}:"<>?|[];\',./';
@@ -48,12 +45,7 @@ const clearAllSymbols = () => {
 };
 
 const copyPassword = async () => {
-  try {
-    await clipboard.value.writeText(password.value);
-    message.success('密码已复制到剪贴板');
-  } catch {
-    message.error('复制失败');
-  }
+  await copyToClipboard(password.value, '密码已复制到剪贴板', '复制失败');
 };
 
 const generatePassword = () => {

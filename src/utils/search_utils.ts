@@ -8,18 +8,3 @@ export interface SearchInfoItem<T> {
 }
 
 export type SearchInfo<T> = SearchInfoItem<T>[];
-
-export const SearchKeyWeights = [
-  {
-    name: 'title',
-    weight: 0.5,
-  },
-  {
-    name: 'description',
-    weight: 0.2,
-  },
-  {
-    name: 'key',
-    weight: 1,
-  },
-]

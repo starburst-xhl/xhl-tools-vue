@@ -22,7 +22,9 @@ const segmentedData = ['L', 'M', 'Q', 'H'];
 const level = ref(segmentedData[0]);
 
 const downloadChange = async () => {
+  if (!qrcodeCanvasRef.value) return;
   const url = qrcodeCanvasRef.value.toDataURL();
+  if (!url) return;
   const a = document.createElement('a');
   a.download = 'QRCode.png';
   a.href = url;
