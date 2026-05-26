@@ -44,7 +44,7 @@ const filteredTools = computed(() => {
 const statsText = computed(() => {
   const total = allTools.value.length
   const filtered = filteredTools.value.length
-  
+
   if (searchQuery.value) {
     return `找到 ${filtered} 个工具（共 ${total} 个）`
   }
@@ -54,6 +54,11 @@ const statsText = computed(() => {
 
 <template>
   <div class="tool-home">
+    <div class="tool-home__header">
+      <h2 class="page-title">工具集合</h2>
+      <p class="page-description">浏览 XHL Tools 提供的所有在线工具，支持快速搜索和分类查找，所有工具都在浏览器本地运行，无需上传数据，安全可靠。</p>
+    </div>
+
     <div class="tool-home__search">
       <a-input
         v-model:value="searchQuery"
@@ -82,6 +87,32 @@ const statsText = computed(() => {
         class="tool-home__card"
       />
     </div>
+
+    <div class="tool-home__footer">
+      <h3 class="footer-title">为什么选择 XHL Tools？</h3>
+      <ul class="feature-list">
+        <li class="feature-item">
+          <span class="feature-icon">🔒</span>
+          <span class="feature-text">所有数据本地处理，保护您的隐私安全</span>
+        </li>
+        <li class="feature-item">
+          <span class="feature-icon">⚡</span>
+          <span class="feature-text">无需安装，即开即用，响应速度快</span>
+        </li>
+        <li class="feature-item">
+          <span class="feature-icon">🎯</span>
+          <span class="feature-text">界面简洁，专注于功能实用性</span>
+        </li>
+        <li class="feature-item">
+          <span class="feature-icon">📱</span>
+          <span class="feature-text">响应式设计，支持各种设备访问</span>
+        </li>
+        <li class="feature-item">
+          <span class="feature-icon">💻</span>
+          <span class="feature-text">开源免费，可自由使用和贡献代码</span>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -91,6 +122,27 @@ const statsText = computed(() => {
   min-height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.tool-home__header {
+  margin-bottom: var(--spacing-xl);
+  margin-top: var(--spacing-xl);
+  text-align: center;
+}
+
+.page-title {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-title);
+  margin-bottom: var(--spacing-md);
+}
+
+.page-description {
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: var(--line-height-body);
 }
 
 .tool-home__search {
@@ -171,10 +223,63 @@ const statsText = computed(() => {
   color: var(--color-text-tertiary);
 }
 
+.tool-home__footer {
+  margin-top: var(--spacing-xxxl);
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-xl);
+  background: var(--color-bg-component);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-light);
+}
+
+.footer-title {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-title);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
+}
+
+.feature-icon {
+  font-size: 1.5rem;
+}
+
+.feature-text {
+  font-size: var(--font-size-body);
+  color: var(--color-text-secondary);
+}
+
 /* 响应式断点 */
 @media (max-width: 767px) {
   .tool-home__search {
     margin-bottom: var(--spacing-lg);
+  }
+
+  .page-title {
+    font-size: var(--font-size-h3);
+  }
+
+  .feature-list {
+    grid-template-columns: 1fr;
   }
 }
 </style>

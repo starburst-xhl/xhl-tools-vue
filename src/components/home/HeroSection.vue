@@ -46,6 +46,7 @@ const goToTools = () => {
           class="hero-btn hero-btn--secondary"
           href="https://github.com/starburst-xhl/xhl-tools-vue"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <template #icon>
             <GithubOutlined />

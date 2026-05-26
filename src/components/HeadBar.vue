@@ -31,10 +31,10 @@ watch(route, () => {
   <div class="head-bar">
     <div class="head-bar__left">
       <div class="head-bar__logo">
-        <img src="@/assets/logo.jpg" alt="XHL Tools" class="logo-image">
+        <img src="@/assets/logo.jpg" alt="XHL Tools" class="logo-image" width="40" height="40">
         <span class="logo-text">XHL Tools</span>
       </div>
-      
+
       <a-menu
         v-model:selectedKeys="currentItem"
         mode="horizontal"
@@ -51,13 +51,14 @@ watch(route, () => {
         </a-menu-item>
       </a-menu>
     </div>
-    
+
     <div class="head-bar__right">
       <a-tooltip title="访问 GitHub 仓库">
-        <a-button 
-          type="text" 
-          href="https://github.com/starburst-xhl/xhl-tools-vue" 
+        <a-button
+          type="text"
+          href="https://github.com/starburst-xhl/xhl-tools-vue"
           target="_blank"
+          rel="noopener noreferrer"
           class="head-bar__github-btn"
         >
           <GithubOutlined />
@@ -153,11 +154,11 @@ watch(route, () => {
   .head-bar {
     padding: 0 var(--spacing-md);
   }
-  
+
   .logo-text {
     display: none;
   }
-  
+
   .head-bar__menu {
     font-size: var(--font-size-body-sm);
   }

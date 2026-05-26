@@ -36,6 +36,7 @@ const techStack = [
                 size="large"
                 href="https://github.com/starburst-xhl/xhl-tools-vue" 
                 target="_blank"
+                rel="noopener noreferrer"
                 class="github-btn"
               >
                 <template #icon>
