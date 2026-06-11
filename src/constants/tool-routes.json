@@ -78,6 +78,16 @@
                 "description": "上传包含二维码的图片，点击「解析二维码」按钮即可识别图片中的二维码内容。支持 PNG / JPG / WEBP 等常见图片格式，解析结果支持一键复制。所有处理在浏览器本地完成，图片不会上传到服务器。",
                 "seoDescription": "免费在线二维码解析识别工具，上传二维码图片即可解码识别内容。支持PNG、JPG、WEBP等格式，本地解析不上传服务器，隐私安全"
               }
+            },
+            {
+              "path": "url-code-tool",
+              "component": "@/views/Tools/CodecTool/UrlCodeTool.vue",
+              "meta": {
+                "icon": "LinkOutlined",
+                "title": "URL 编解码",
+                "description": "输入待处理的文本内容，点击「编码」将特殊字符转换为 URL 安全格式（%xx），或点击「解码」将 %xx 格式还原为原始字符。编码结果自动复制到剪贴板。",
+                "seoDescription": "免费在线URL编码和解码工具，将特殊字符转换为URL安全格式，支持中文等Unicode字符编码解码。适用于API请求参数处理、URL参数传递等场景"
+              }
             }
           ]
         },

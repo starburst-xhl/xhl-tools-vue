@@ -51,6 +51,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SideMenuPage: typeof import('./src/components/SideMenuPage.vue')['default']
     ToolCard: typeof import('./src/components/tools/ToolCard.vue')['default']
+    ToolTips: typeof import('./src/components/ToolTips.vue')['default']
   }
 }
 
@@ -95,4 +96,5 @@ declare global {
   const RouterView: typeof import('vue-router')['RouterView']
   const SideMenuPage: typeof import('./src/components/SideMenuPage.vue')['default']
   const ToolCard: typeof import('./src/components/tools/ToolCard.vue')['default']
+  const ToolTips: typeof import('./src/components/ToolTips.vue')['default']
 }

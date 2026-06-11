@@ -20,7 +20,7 @@ const processInput = async () => {
     await new Promise(resolve => setTimeout(resolve, 500)); // 模拟异步
     result.value = `处理结果: ${inputValue.value}`;
     message.success("处理完成");
-  } catch (error) {
+  } catch {
     message.error("处理失败");
   } finally {
     isLoading.value = false;
@@ -38,7 +38,7 @@ const copyResult = async () => {
   try {
     await navigator.clipboard.writeText(result.value);
     message.success("已复制到剪贴板");
-  } catch (error) {
+  } catch {
     message.error("复制失败");
   }
 };
@@ -85,10 +85,10 @@ const copyResult = async () => {
 
 <style scoped>
 .tool-template {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
-  max-width: 500px;
 }
 
 .tool-template__input-section {
@@ -105,8 +105,9 @@ const copyResult = async () => {
   justify-content: center;
 }
 
+/* 结果区卡片 — 注意：只有子区块才用卡片，根元素不加卡片 */
 .tool-template__result {
-  background: var(--color-bg);
+  background: var(--color-bg-component);
   padding: var(--spacing-lg);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-light);
