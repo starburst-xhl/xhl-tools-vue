@@ -68,6 +68,16 @@
                 "description": "粘贴或输入 JSON 字符串，点击「格式化」按钮美化结构（增加缩进和换行，便于阅读），或点击「压缩」减少体积。支持语法错误检测，格式错误时会有提示。处理完成后点击「复制」获取结果。",
                 "seoDescription": "在线JSON格式化、压缩和校验工具，美化JSON结构或压缩减少体积，支持语法错误检测。适用于API调试和数据美化"
               }
+            },
+            {
+              "path": "qr-code-parser",
+              "component": "@/views/Tools/CodecTool/QrCodeParserTool.vue",
+              "meta": {
+                "icon": "ScanOutlined",
+                "title": "二维码解析器",
+                "description": "上传包含二维码的图片，点击「解析二维码」按钮即可识别图片中的二维码内容。支持 PNG / JPG / WEBP 等常见图片格式，解析结果支持一键复制。所有处理在浏览器本地完成，图片不会上传到服务器。",
+                "seoDescription": "免费在线二维码解析识别工具，上传二维码图片即可解码识别内容。支持PNG、JPG、WEBP等格式，本地解析不上传服务器，隐私安全"
+              }
             }
           ]
         },

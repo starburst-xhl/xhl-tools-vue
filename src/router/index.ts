@@ -19,6 +19,7 @@ export const routes = [
               { path: 'qr-code', name: 'QrCode', component: () => import('@/views/Tools/CodecTool/QRCode.vue'), meta: { title: '二维码生成器', icon: 'QrcodeOutlined', description: '在文本框中输入任意内容（文本、网址、邮箱、电话等），选择纠错级别后点击「下载」按钮即可生成并保存二维码图片。纠错级别越高，二维码可被遮挡的面积越大。', seoDescription: '免费在线二维码生成器，输入文本、网址等内容即可生成高清二维码。提供多种纠错级别选择，一键下载为PNG格式' } },
               { path: 'aes-tool', name: 'AesTool', component: () => import('@/views/Tools/CodecTool/AesTool.vue'), meta: { title: 'AES 加解密', icon: 'LockOutlined', description: '输入待加密或解密的文本内容，设置密钥（支持 128/192/256 位密钥长度），点击「加密」或「解密」按钮完成操作。注意：加密和解密需使用相同的密钥。', seoDescription: '在线AES加密和解密工具，支持AES-128/192/256多种密钥长度，采用ECB加密模式。保护敏感数据安全，简单易用，无需注册即可使用' } },
               { path: 'json-formatter', name: 'JsonFormatter', component: () => import('@/views/Tools/CodecTool/JsonFormatter.vue'), meta: { title: 'JSON 格式化', icon: 'CodeOutlined', description: '粘贴或输入 JSON 字符串，点击「格式化」按钮美化结构（增加缩进和换行，便于阅读），或点击「压缩」减少体积。支持语法错误检测，格式错误时会有提示。处理完成后点击「复制」获取结果。', seoDescription: '在线JSON格式化、压缩和校验工具，美化JSON结构或压缩减少体积，支持语法错误检测。适用于API调试和数据美化' } },
+              { path: 'qr-code-parser', name: 'QrCodeParser', component: () => import('@/views/Tools/CodecTool/QrCodeParserTool.vue'), meta: { title: '二维码解析器', icon: 'ScanOutlined', description: '上传包含二维码的图片，点击「解析二维码」按钮即可识别图片中的二维码内容。支持 PNG / JPG / WEBP 等常见图片格式，解析结果支持一键复制。所有处理在浏览器本地完成，图片不会上传到服务器。', seoDescription: '免费在线二维码解析识别工具，上传二维码图片即可解码识别内容。支持PNG、JPG、WEBP等格式，本地解析不上传服务器，隐私安全' } },
             ]
           },
           {
