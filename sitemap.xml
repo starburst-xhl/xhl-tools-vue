@@ -38,6 +38,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://tools.xhcy.cc/tools/codec-tool/qr-code-parser/</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://tools.xhcy.cc/tools/number-tool/stopwatch-tool/</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
