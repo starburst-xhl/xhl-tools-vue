@@ -2,7 +2,7 @@
   <div class="qr-code__container">
     <a-form layout="vertical" style="width: 100%">
       <a-form-item label="二维码内容">
-        <a-textarea v-model:value="text" placeholder="请输入文本" :maxlength="100" show-count :rows="4"/>
+        <a-textarea v-model:value="text" placeholder="请输入文本" :maxlength="2000" show-count :rows="4"/>
       </a-form-item>
       <a-form-item label="纠错级别">
         <a-segmented v-model:value="level" :options="segmentedData"/>
