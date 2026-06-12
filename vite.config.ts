@@ -50,14 +50,29 @@ export default defineConfig({
     // SSR 样式提取：将 antdv CSS-in-JS 生成的样式注入到 HTML 中，防止闪烁
     onPageRendered(_route, renderedHTML, appCtx) {
       const cache = appCtx.initialState?.antdCache
+      let result = renderedHTML
+
+      // SSG 构建会丢失 index.html 模板中的 Content-Security-Policy，
+      // 因此需在 onPageRendered 中重新注入 busuanzi CDN 白名单
+      if (result.indexOf('https://cdn.busuanzi.cc') === -1) {
+        result = result.replace(
+          "script-src 'self' 'unsafe-inline'",
+          "script-src 'self' 'unsafe-inline' https://cdn.busuanzi.cc"
+        )
+      }
+
+      // 注入 antdv CSS-in-JS 提取的样式
       if (cache) {
-        // extractStyle(cache, false) 返回 <style> 标签包裹的 HTML 字符串
         const styleContent = extractStyle(cache)
         if (styleContent) {
-          return renderedHTML.replace('</head>', `${styleContent}</head>`)
+          const insertPos = result.indexOf('</head>')
+          if (insertPos !== -1) {
+            result = result.slice(0, insertPos) + styleContent + '\n  ' + result.slice(insertPos)
+          }
         }
       }
-      return renderedHTML
+
+      return result
     },
   },
   ssr: {

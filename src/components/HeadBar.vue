@@ -2,7 +2,7 @@
 import { computed, ref, watch } from "vue";
 import { type RouteRecordRaw, useRoute } from "vue-router";
 import { badString } from "@/utils/string_utils.ts";
-import { GithubOutlined } from "@ant-design/icons-vue";
+import { GithubOutlined, EyeOutlined, UserOutlined } from "@ant-design/icons-vue";
 
 defineProps<{
   routes: RouteRecordRaw[];
@@ -53,6 +53,20 @@ watch(route, () => {
     </div>
 
     <div class="head-bar__right">
+      <div class="head-bar__stats">
+        <a-tooltip title="全站总访问量">
+          <span class="head-bar__stat-item">
+            <EyeOutlined />
+            <span id="busuanzi_site_pv">0</span>
+          </span>
+        </a-tooltip>
+        <a-tooltip title="全站总访客数">
+          <span class="head-bar__stat-item">
+            <UserOutlined />
+            <span id="busuanzi_site_uv">0</span>
+          </span>
+        </a-tooltip>
+      </div>
       <a-tooltip title="访问 GitHub 仓库">
         <a-button
           type="text"
@@ -149,6 +163,29 @@ watch(route, () => {
   color: var(--color-primary);
 }
 
+.head-bar__stats {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.head-bar__stat-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-tertiary);
+  font-size: 13px;
+  transition: var(--transition-fast);
+  cursor: default;
+}
+
+.head-bar__stat-item:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-primary);
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .head-bar {
@@ -161,6 +198,10 @@ watch(route, () => {
 
   .head-bar__menu {
     font-size: var(--font-size-body-sm);
+  }
+
+  .head-bar__stats {
+    display: none;
   }
 }
 </style>
