@@ -61,6 +61,15 @@ export default defineConfig({
     },
   },
   ssr: {
-    noExternal: ['ant-design-vue', '@ant-design/icons-vue', '@ant-design/icons-svg', 'crypto-js', 'jsqr'],
+    noExternal: [
+      'ant-design-vue',
+      '@ant-design/icons-vue',
+      '@ant-design/icons-svg',
+      'crypto-js',
+      'jsqr',
+      'browser-image-compression',
+      '@ffmpeg/ffmpeg',
+      '@ffmpeg/util',
+    ],
   },
 })

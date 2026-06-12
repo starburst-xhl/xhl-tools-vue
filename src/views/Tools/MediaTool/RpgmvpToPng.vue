@@ -1,129 +1,137 @@
 <script setup lang="ts">
-import JSZip from "jszip";
 import type {UploadFile, UploadProps} from "ant-design-vue";
 import {ref} from "vue";
 import {UploadOutlined} from "@ant-design/icons-vue";
+import ToolTips from "@/components/ToolTips.vue";
+import {decryptRPGMVPFile, downloadBlob, createZipFromFiles} from "@/utils/media_utils";
 
 const fileList = ref<UploadFile[]>([]);
 const pack = ref(false);
+const isLoading = ref(false);
+
 const beforeUpload: UploadProps['beforeUpload'] = file => {
   fileList.value = [...(fileList.value || []), file];
   return false;
 };
 
-// 转换 RPG Maker MV 文件的函数
-function decryptRPGMVPFile(file: File): Promise<Uint8Array> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      // 检查 e.target 和 e.target.result 是否存在且不是 null/undefined
-      if (e.target && e.target.result) {
-        try {
-          const data = new Uint8Array(e.target.result as ArrayBuffer);
-          const pngHeader = new Uint8Array([
-            0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00,
-            0x0d, 0x49, 0x48, 0x44, 0x52,
-          ]);
-          const pngData = new Uint8Array(pngHeader.length + data.length - 32);
-
-          // 确保 data.length 至少为 32，以避免数组越界
-          if (data.length < 32) {
-            throw new Error('数据长度不足');
-          }
-
-          pngData.set(pngHeader);
-          pngData.set(data.slice(32), pngHeader.length);
-          resolve(pngData);
-        } catch (error) {
-          reject(error);
-        }
-      } else {
-        reject(new Error('无法读取文件内容'));
-      }
-    };
-    reader.readAsArrayBuffer(file);
-  });
-}
-
 // 处理文件选择事件的函数
 async function handleFileTransform() {
-  const files = fileList.value.map((file) => file.originFileObj).filter((file) => file !== undefined) as File[];
-  const packFiles = pack.value;
+  const files = fileList.value
+    .map((f) => f.originFileObj)
+    .filter((f): f is Exclude<UploadFile['originFileObj'], undefined> =>
+      f !== undefined && f.name.endsWith(".rpgmvp"),
+    );
 
-  if (packFiles) {
-    // 将所有图片打包在一起下载
-    const zipWriter = new JSZip();
-    const decryptPromises = [];
+  if (files.length === 0) return;
 
-    for (const file of files) {
-      if (file.name.endsWith(".rpgmvp")) {
-        decryptPromises.push(
-          decryptRPGMVPFile(file).then((pngData) => {
-            zipWriter.file(file.name.replace(".rpgmvp", ".png"), pngData);
-          })
-        );
+  isLoading.value = true;
+  try {
+    if (pack.value) {
+      // 将所有图片打包在一起下载
+      const decryptResults = await Promise.all(
+        files.map(async (f) => ({
+          name: f.name.replace(".rpgmvp", ".png"),
+          data: await decryptRPGMVPFile(f as File),
+        })),
+      )
+      const zipBlob = await createZipFromFiles(decryptResults)
+      downloadBlob(zipBlob, "converted_files.zip")
+    } else {
+      // 单独下载每个图片
+      for (const f of files) {
+        const pngData = await decryptRPGMVPFile(f as File)
+        const blob = new Blob([pngData], {type: "image/png"})
+        downloadBlob(blob, f.name.replace(".rpgmvp", ".png"))
       }
     }
-
-    await Promise.all(decryptPromises);
-
-    const content = await zipWriter.generateAsync({type: "blob"});
-    const url = URL.createObjectURL(content);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "converted_files.zip";
-    link.click();
-    URL.revokeObjectURL(url);
-  } else {
-    // 单独下载每个图片
-    for (const file of files) {
-      if (file.name.endsWith(".rpgmvp")) {
-        const pngData = await decryptRPGMVPFile(file);
-        const blob = new Blob([pngData], {type: "image/png"});
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = file.name.replace(".rpgmvp", ".png");
-        link.click();
-        URL.revokeObjectURL(url);
-      }
-    }
+    fileList.value = [];
+  } catch {
+    // 转换过程中如有错误，静默处理
+  } finally {
+    isLoading.value = false;
   }
-  fileList.value = [];
 }
 </script>
 
 <template>
-  <div class="rpgmvp-to-png__container">
-    <div class="rpgmvp-to-png__upload">
-      <a-upload
-        v-model:file-list="fileList"
-        :before-upload="beforeUpload"
-        accept=".rpgmvp"
-        multiple
-      >
-        <a-button>
-          <UploadOutlined/>
-          点击上传.rpgmvp文件
+  <div class="rpgmvp-to-png">
+    <div class="tool-content">
+      <div>
+        <label class="section-label">上传 .rpgmvp 文件</label>
+        <div class="rpgmvp-to-png__upload">
+          <a-upload
+            v-model:file-list="fileList"
+            :before-upload="beforeUpload"
+            accept=".rpgmvp"
+            multiple
+          >
+            <a-button>
+              <UploadOutlined/>
+              选择文件
+            </a-button>
+          </a-upload>
+        </div>
+      </div>
+
+      <div class="rpgmvp-to-png__options">
+        <a-checkbox v-model:checked="pack">打包为 ZIP 下载</a-checkbox>
+      </div>
+
+      <div class="button-container">
+        <a-button type="primary" :loading="isLoading" @click="handleFileTransform">
+          转换并下载
         </a-button>
-      </a-upload>
+      </div>
+
+      <ToolTips :tips="[
+        '支持 RPG Maker MV 加密的 .rpgmvp 格式图片',
+        '可选择单张下载或打包为 ZIP 批量下载',
+        '所有转换在浏览器本地完成，数据不上传服务器',
+      ]" />
     </div>
-    <a-checkbox v-model:checked="pack">打包下载</a-checkbox>
-    <a-button type="primary" @click="handleFileTransform">转换并下载</a-button>
   </div>
 </template>
 
 <style scoped>
-.rpgmvp-to-png__container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: start;
-  width: 400px;
+.rpgmvp-to-png {
+  width: 100%;
 }
 
+.tool-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* ===== 统一样式规范 ===== */
+
+/* 区段标签 — 标记输入/输出区域 */
+.section-label {
+  display: block;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-title);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* 按钮容器 */
+.button-container {
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--spacing-md);
+}
+
+/* ===== 工具特有样式 ===== */
+
+/* 上传区域 — 虚线边框 */
 .rpgmvp-to-png__upload {
-  border: 1px dashed #d9d9d9;
-  padding: 16px;
+  border: 1px dashed var(--color-border);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+}
+
+/* 选项区 */
+.rpgmvp-to-png__options {
+  padding: var(--spacing-sm) 0;
 }
 </style>

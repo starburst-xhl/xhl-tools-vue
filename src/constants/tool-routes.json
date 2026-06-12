@@ -88,6 +88,16 @@
                 "description": "输入待处理的文本内容，点击「编码」将特殊字符转换为 URL 安全格式（%xx），或点击「解码」将 %xx 格式还原为原始字符。编码结果自动复制到剪贴板。",
                 "seoDescription": "免费在线URL编码和解码工具，将特殊字符转换为URL安全格式，支持中文等Unicode字符编码解码。适用于API请求参数处理、URL参数传递等场景"
               }
+            },
+            {
+              "path": "encoding-fixer",
+              "component": "@/views/Tools/CodecTool/EncodingFixer.vue",
+              "meta": {
+                "icon": "WarningOutlined",
+                "title": "编码乱码修复器",
+                "description": "粘贴或输入显示为乱码的文本，点击「自动检测修复」自动识别编码问题并修复，支持中文 GBK/Big5、日文 Shift_JIS、韩文 EUC-KR 等常见编码乱码。自动修复不准确时可在手动修复中指定编码组合。",
+                "seoDescription": "编码乱码修复器，自动检测并修复中文GBK/Big5、日文Shift_JIS、韩文EUC-KR等编码问题。支持Latin-1互转，自动评分推荐最佳方案，本地处理不上传服务器"
+              }
             }
           ]
         },
