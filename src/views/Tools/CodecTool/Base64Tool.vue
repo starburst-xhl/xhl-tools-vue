@@ -32,18 +32,18 @@ const decode = () => {
   <div class="base64-tool">
     <div class="tool-content">
       <div class="input-section">
-        <label class="section-label">输入文本</label>
-        <a-textarea v-model:value="inputText" placeholder="输入需要编码或解码的文本..." :rows="4" class="text-input"/>
+        <label class="section-label">原始文本</label>
+        <a-textarea v-model:value="inputText" placeholder="输入需要编码的普通文本..." :rows="4" class="text-input"/>
       </div>
       
       <div class="button-container">
-        <a-button @click="encode" type="primary" size="large">
+        <a-button @click="encode" type="primary">
           <template #icon>
             <DownOutlined/>
           </template>
           编码
         </a-button>
-        <a-button @click="decode" type="primary" size="large">
+        <a-button @click="decode" type="primary">
           <template #icon>
             <UpOutlined/>
           </template>
@@ -52,8 +52,8 @@ const decode = () => {
       </div>
       
       <div class="output-section">
-        <label class="section-label">输出结果</label>
-        <a-textarea v-model:value="outputText" placeholder="编码或解码后的结果将显示在这里..." :rows="4" class="text-output"/>
+        <label class="section-label">Base64 编码</label>
+        <a-textarea v-model:value="outputText" placeholder="粘贴 Base64 编码进行解码..." :rows="4" class="text-output"/>
       </div>
 
       <ToolTips :tips="[
@@ -76,11 +76,9 @@ const decode = () => {
   gap: var(--spacing-lg);
 }
 
-.input-section,
-.output-section {
-  margin-bottom: var(--spacing-sm);
-}
+/* ===== 统一样式规范 ===== */
 
+/* 区段标签 — 标记输入框/输出框等小区域 */
 .section-label {
   display: block;
   font-size: var(--font-size-body);
@@ -89,24 +87,25 @@ const decode = () => {
   margin-bottom: var(--spacing-sm);
 }
 
-.text-input,
-.text-output {
-  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-  font-size: 14px;
-}
-
+/* 按钮容器 — 居中排列 */
 .button-container {
   display: flex;
   justify-content: center;
   gap: var(--spacing-md);
 }
 
-/* 响应式设计 */
+/* 代码字体 */
+.text-input,
+.text-output {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+}
+
+/* ===== 响应式 ===== */
 @media (max-width: 767px) {
   .button-container {
     flex-direction: column;
   }
-  
   .button-container .ant-btn {
     width: 100%;
   }

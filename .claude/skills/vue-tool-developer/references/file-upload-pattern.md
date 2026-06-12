@@ -228,11 +228,11 @@ const handleDrop = (e: DragEvent) => {
   white-space: nowrap;
 }
 
-/* 结果卡片 — 子区块才用卡片 */
-.result-card {
-  background: var(--color-bg-component);
+/* 结果卡片 — 使用 content-card 统一规范 */
+.content-card {
+  background: var(--color-bg);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg);
   border: 1px solid var(--color-border-light);
 }
 ```

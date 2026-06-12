@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { message } from "ant-design-vue";
+import { copyToClipboard } from "@/utils/clipboard_utils";
+import ToolTips from "@/components/ToolTips.vue";
 
 // 状态定义
 const inputValue = ref<string>("");
@@ -33,102 +35,133 @@ const resetForm = () => {
   result.value = "";
 };
 
-// 复制函数
+// 复制函数 — 使用项目封装的 copyToClipboard（带 SSR 守卫）
 const copyResult = async () => {
-  try {
-    await navigator.clipboard.writeText(result.value);
-    message.success("已复制到剪贴板");
-  } catch {
-    message.error("复制失败");
-  }
+  await copyToClipboard(result.value, "已复制到剪贴板", "复制失败");
 };
 </script>
 
 <template>
   <div class="tool-template">
-    <!-- 输入区域 -->
-    <div class="tool-template__input-section">
-      <a-input
-        v-model:value="inputValue"
-        placeholder="请输入内容"
-        class="tool-template__input"
-        @pressEnter="processInput"
-      />
-    </div>
+    <div class="tool-content">
+      <!-- 输入区域 -->
+      <div>
+        <label class="section-label">输入内容</label>
+        <a-textarea
+          v-model:value="inputValue"
+          placeholder="请输入需要处理的内容..."
+          :rows="4"
+        />
+      </div>
 
-    <!-- 操作按钮 -->
-    <div class="tool-template__actions">
-      <a-button
-        type="primary"
-        :loading="isLoading"
-        @click="processInput"
-      >
-        处理
-      </a-button>
-      <a-button @click="resetForm">
-        重置
-      </a-button>
-    </div>
-
-    <!-- 结果展示 -->
-    <div v-if="result" class="tool-template__result">
-      <div class="tool-template__result-header">
-        <span class="tool-template__result-title">处理结果</span>
-        <a-button type="link" size="small" @click="copyResult">
-          复制
+      <!-- 操作按钮 -->
+      <div class="button-container">
+        <a-button
+          type="primary"
+          :loading="isLoading"
+          @click="processInput"
+        >
+          处理
+        </a-button>
+        <a-button @click="resetForm">
+          重置
         </a-button>
       </div>
-      <p class="tool-template__result-text">{{ result }}</p>
+
+      <!-- 结果展示 -->
+      <div v-if="result" class="content-card">
+        <div class="card-header">
+          <div class="section-title">处理结果</div>
+          <a-button type="link" size="small" @click="copyResult">
+            复制
+          </a-button>
+        </div>
+        <p class="result-text">{{ result }}</p>
+      </div>
+
+      <ToolTips :tips="[
+        '所有处理在浏览器本地完成，数据不会上传到服务器',
+        '处理成功后可点击复制按钮将结果复制到剪贴板',
+      ]" />
     </div>
   </div>
 </template>
 
 <style scoped>
+/* 页面根容器 — 只设 width，不要加背景/边框/圆角 */
 .tool-template {
   width: 100%;
+}
+
+/* 内容布局 — flex column + gap */
+.tool-content {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
 }
 
-.tool-template__input-section {
-  width: 100%;
-}
-
-.tool-template__input {
-  width: 100%;
-}
-
-.tool-template__actions {
+/* 按钮容器 — 居中排列 */
+.button-container {
   display: flex;
-  gap: var(--spacing-md-sm);
   justify-content: center;
+  gap: var(--spacing-md);
 }
 
-/* 结果区卡片 — 注意：只有子区块才用卡片，根元素不加卡片 */
-.tool-template__result {
-  background: var(--color-bg-component);
+/* ===== 统一样式规范：以下为标准定义，所有工具页面统一使用 ===== */
+
+/* 区段标签 — 标记输入框/输出框等小区域 */
+.section-label {
+  display: block;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-title);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* 区块标题 — 内容卡片内的区块头部 */
+.section-title {
+  font-size: var(--font-size-h5);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-title);
+  margin-bottom: var(--spacing-md);
+}
+
+/* 内容卡片 — 子区块容器（不要给根元素加卡片样式） */
+.content-card {
+  background: var(--color-bg);
   padding: var(--spacing-lg);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-light);
 }
 
-.tool-template__result-header {
+/* 卡片头部 — 标题 + 右侧操作按钮 */
+.card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-md);
 }
 
-.tool-template__result-title {
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-title);
+/* 卡片头部内的 section-title 不需要额外 margin-bottom（card-header 已处理） */
+.card-header .section-title {
+  margin-bottom: 0;
 }
 
-.tool-template__result-text {
+/* 结果文字 */
+.result-text {
   margin: 0;
   font-size: var(--font-size-body);
   color: var(--color-text-secondary);
   line-height: var(--line-height-body);
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 767px) {
+  .button-container {
+    flex-direction: column;
+  }
+  .button-container .ant-btn {
+    width: 100%;
+  }
 }
 </style>

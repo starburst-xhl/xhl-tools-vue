@@ -10,6 +10,9 @@
 --color-primary-light: #ffb84d        /* 主色浅 */
 --color-primary-dark: #e68a00         /* 主色深 */
 --color-primary-bg: #fff8f0           /* 主色背景 */
+--color-primary-bg-light: #fffbf5     /* 主色极浅背景 */
+--color-primary-hover: #ff8c00        /* 主色悬停 */
+--color-primary-active: #d97a00       /* 主色激活 */
 ```
 
 ### 文字
@@ -25,9 +28,15 @@
 ```css
 --color-border: #d9d9d9               /* 边框 */
 --color-border-light: #f0f0f0         /* 浅边框 */
---color-bg: #fafafa                   /* 页面背景 */
---color-bg-component: #ffffff         /* 组件背景 */
+--color-border-lighter: #f5f5f5       /* 极浅边框 */
+--color-border-dark: #bfbfbf          /* 深边框 */
+--color-bg: #fafafa                   /* 页面背景 / 内容卡片背景 */
+--color-bg-component: #ffffff         /* 组件背景（白底） */
 --color-bg-hover: #f5f5f5             /* 悬停背景 */
+--color-bg-tool-display: rgb(255, 248, 230) /* 工具展示区暖黄背景 — 用于结果/时间/密码等突出显示 */
+--color-bg-selected: #fff8f0          /* 已选中背景 */
+--color-bg-disabled: #f5f5f5          /* 禁用背景 */
+--color-divider: #f0f0f0              /* 分隔线 */
 ```
 
 ### 功能色
@@ -46,9 +55,11 @@
 --font-size-h2: 28px                  /* 二级标题 */
 --font-size-h3: 20px                  /* 三级标题 */
 --font-size-h4: 18px                  /* 四级标题 */
+--font-size-h5: 16px                  /* 五级标题 / 区块标题 */
 --font-size-body: 14px                /* 正文 */
 --font-size-body-sm: 13px             /* 小号正文 */
 --font-size-caption: 12px             /* 辅助文字 */
+--font-size-caption-sm: 11px          /* 极小辅助文字 */
 ```
 
 ## 字重
@@ -97,11 +108,16 @@
 
 ## 阴影
 
+> ⚠️ 项目采用扁平化设计，工具页面**不使用阴影**。以下令牌仅用于特殊场景（如 DiceTool 动画效果）。
+
 ```css
---shadow-sm: 0 2px 8px rgba(0,0,0,0.08)      /* 卡片 */
---shadow-md: 0 4px 16px rgba(0,0,0,0.12)     /* 悬停 */
---shadow-lg: 0 8px 24px rgba(0,0,0,0.16)     /* 浮动 */
---shadow-xl: 0 12px 32px rgba(0,0,0,0.20)    /* 弹窗 */
+--color-shadow: rgba(0,0,0,0.08)               /* 基础阴影色 */
+--color-shadow-light: rgba(0,0,0,0.04)         /* 浅阴影色 */
+--color-shadow-dark: rgba(0,0,0,0.16)          /* 深阴影色 */
+--shadow-sm: 0 2px 8px rgba(0,0,0,0.08)        /* 卡片 — 日常不使用 */
+--shadow-md: 0 4px 16px rgba(0,0,0,0.12)       /* 悬停 — 日常不使用 */
+--shadow-lg: 0 8px 24px rgba(0,0,0,0.16)       /* 浮动 — 日常不使用 */
+--shadow-xl: 0 12px 32px rgba(0,0,0,0.20)      /* 弹窗 — 日常不使用 */
 ```
 
 ## 动画
@@ -129,22 +145,23 @@
 
 ## 快速示例
 
-### 卡片组件
+### 内容卡片（扁平化，不用阴影）
 ```css
-.card {
-  background: var(--color-bg-component);
+.content-card {
+  background: var(--color-bg);
   padding: var(--spacing-lg);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition-normal);
+  border: 1px solid var(--color-border-light);
 }
 ```
 
-### 按钮悬停
+### 工具展示区（暖黄背景，突出显示）
 ```css
-.button:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+.result-display {
+  background: var(--color-bg-tool-display);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  text-align: center;
 }
 ```
 

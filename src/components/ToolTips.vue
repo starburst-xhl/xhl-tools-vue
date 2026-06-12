@@ -17,12 +17,13 @@ defineProps<{
 </script>
 
 <style scoped>
+/* ToolTips 使用与 content-card 一致的样式规范 */
 .tool-tips {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
-  padding: var(--spacing-xl);
   background: var(--color-bg);
+  padding: var(--spacing-lg);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border-light);
 }

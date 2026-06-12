@@ -49,7 +49,7 @@ message.info("提示信息");
 try {
   const result = JSON.parse(input);
   message.success("格式化成功");
-} catch (error) {
+} catch {
   message.error("JSON格式不正确");
 }
 
@@ -60,12 +60,8 @@ if (!input.trim()) {
 
 #### 复制操作
 ```typescript
-try {
-  await navigator.clipboard.writeText(text);
-  message.success("已复制到剪贴板");
-} catch (error) {
-  message.error("复制失败");
-}
+import { copyToClipboard } from "@/utils/clipboard_utils";
+await copyToClipboard(text, "已复制到剪贴板", "复制失败");
 ```
 
 #### 文件操作
@@ -78,7 +74,7 @@ if (!file) {
 try {
   await processFile(file);
   message.success("文件处理成功");
-} catch (error) {
+} catch {
   message.error("文件处理失败");
 }
 ```
@@ -178,6 +174,7 @@ const isValid = computed(() => {
 <script setup lang="ts">
 import { ref } from "vue";
 import { message } from "ant-design-vue";
+import { copyToClipboard } from "@/utils/clipboard_utils";
 
 const inputValue = ref<string>("");
 const result = ref<string>("");
@@ -196,25 +193,21 @@ const processInput = async () => {
     await new Promise(resolve => setTimeout(resolve, 500));
     result.value = `处理结果: ${inputValue.value}`;
     message.success("处理完成");
-  } catch (error) {
+  } catch {
     message.error("处理失败");
   } finally {
     isLoading.value = false;
   }
 };
 
+// 复制 — 使用项目封装的 copyToClipboard（带 SSR 守卫 + fallback）
 const copyResult = async () => {
   if (!result.value) {
     message.warning("没有可复制的内容");
     return;
   }
 
-  try {
-    await navigator.clipboard.writeText(result.value);
-    message.success("已复制到剪贴板");
-  } catch (error) {
-    message.error("复制失败");
-  }
+  await copyToClipboard(result.value, "已复制到剪贴板", "复制失败");
 };
 </script>
 
