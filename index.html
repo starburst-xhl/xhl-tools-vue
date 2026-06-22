@@ -53,6 +53,25 @@
   </head>
   <body>
     <div id="app"></div>
+    <!-- busuanzi 数据劫持：在 Vue hydration 之前将统计数据持久化到 sessionStorage -->
+    <script>
+      (function() {
+        var observer = new MutationObserver(function() {
+          var pv = document.getElementById('busuanzi_site_pv');
+          var uv = document.getElementById('busuanzi_site_uv');
+          var pvText = pv && pv.textContent.trim();
+          var uvText = uv && uv.textContent.trim();
+          if (pvText && pvText !== '0') {
+            sessionStorage.setItem('busuanzi_site_pv', pvText);
+            window.dispatchEvent(new CustomEvent('busuanzi-updated', { detail: { pv: pvText, uv: uvText } }));
+          }
+          if (uvText && uvText !== '0') {
+            sessionStorage.setItem('busuanzi_site_uv', uvText);
+          }
+        });
+        observer.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+      })();
+    </script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

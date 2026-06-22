@@ -27,53 +27,27 @@ watch(route, () => {
 }, { immediate: true });
 
 // --- busuanzi 统计数据持久化 (sessionStorage) ---
+// 数据由 index.html 内联脚本在 Vue hydration 之前/之后写入 sessionStorage，
+// 并通过自定义事件 busuanzi-updated 通知 Vue 更新
 const BUSUANZI_PV_KEY = 'busuanzi_site_pv';
 const BUSUANZI_UV_KEY = 'busuanzi_site_uv';
 
-const sitePv = ref(sessionStorage.getItem(BUSUANZI_PV_KEY) || '0');
-const siteUv = ref(sessionStorage.getItem(BUSUANZI_UV_KEY) || '0');
+const sitePv = ref((typeof sessionStorage !== 'undefined' && sessionStorage.getItem(BUSUANZI_PV_KEY)) || '0');
+const siteUv = ref((typeof sessionStorage !== 'undefined' && sessionStorage.getItem(BUSUANZI_UV_KEY)) || '0');
 
-let observer: MutationObserver | null = null;
+function onBusuanziUpdated(e: CustomEvent) {
+  const { pv, uv } = e.detail || {};
+  // 注意："0" 在 JS 中是 truthy 字符串，必须显式排除
+  if (pv && pv !== '0') sitePv.value = pv;
+  if (uv && uv !== '0') siteUv.value = uv;
+}
 
 onMounted(() => {
-  // 监听 busuanzi 脚本填充数据
-  const pvEl = document.getElementById('busuanzi_site_pv');
-  const uvEl = document.getElementById('busuanzi_site_uv');
-
-  if (pvEl && uvEl) {
-    // 初始读取（busuanzi 可能比 Vue hydration 更早执行）
-    const pvText = pvEl.textContent?.trim();
-    const uvText = uvEl.textContent?.trim();
-    if (pvText && pvText !== '0') {
-      sitePv.value = pvText;
-      sessionStorage.setItem(BUSUANZI_PV_KEY, pvText);
-    }
-    if (uvText && uvText !== '0') {
-      siteUv.value = uvText;
-      sessionStorage.setItem(BUSUANZI_UV_KEY, uvText);
-    }
-
-    // 使用 MutationObserver 监听后续变化
-    observer = new MutationObserver(() => {
-      const pv = pvEl.textContent?.trim();
-      const uv = uvEl.textContent?.trim();
-      if (pv && pv !== '0') {
-        sitePv.value = pv;
-        sessionStorage.setItem(BUSUANZI_PV_KEY, pv);
-      }
-      if (uv && uv !== '0') {
-        siteUv.value = uv;
-        sessionStorage.setItem(BUSUANZI_UV_KEY, uv);
-      }
-    });
-
-    observer.observe(pvEl, { characterData: true, subtree: true });
-    observer.observe(uvEl, { characterData: true, subtree: true });
-  }
+  window.addEventListener('busuanzi-updated', onBusuanziUpdated as EventListener);
 });
 
 onUnmounted(() => {
-  observer?.disconnect();
+  window.removeEventListener('busuanzi-updated', onBusuanziUpdated as EventListener);
 });
 </script>
 
