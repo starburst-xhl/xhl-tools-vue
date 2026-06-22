@@ -3,6 +3,7 @@ import type { FunctionalComponent } from 'vue';
 import type { AntdIconProps } from '@ant-design/icons-vue/lib/components/AntdIcon';
 import {
   AppstoreOutlined,
+  ApartmentOutlined,
   CodeOutlined,
   QrcodeOutlined,
   LockOutlined,
@@ -51,6 +52,7 @@ export interface ExtendedRouteMeta {
  */
 const iconMap: Record<string, FunctionalComponent<AntdIconProps>> = {
   AppstoreOutlined,
+  ApartmentOutlined,
   CodeOutlined,
   QrcodeOutlined,
   LockOutlined,

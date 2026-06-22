@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from "vue";
+import { message } from "ant-design-vue";
 import { copyToClipboard } from "@/utils/clipboard_utils";
-import { CopyOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons-vue";
+import { CopyOutlined, PlusOutlined, DeleteOutlined, ImportOutlined } from "@ant-design/icons-vue";
 
 /**
  * 字段类型
@@ -27,6 +28,11 @@ const fields = reactive<Field[]>([]);
 
 // 生成记录数
 const generateCount = ref(10);
+
+// 导入 Schema
+const importModalVisible = ref(false);
+const importSchemaText = ref('');
+const importError = ref('');
 
 // 生成的JSON数据
 const generatedJson = ref('');
@@ -274,6 +280,154 @@ const copyJson = async () => {
   await copyToClipboard(generatedJson.value, '已复制到剪贴板', '复制失败');
 };
 
+// ---- 字段类型映射 ----
+const schemaTypeMapping: Record<string, FieldType> = {
+  'string': 'string',
+  'number': 'number',
+  'integer': 'number',
+  'boolean': 'boolean',
+  'name': 'name',
+  'idCard': 'idCard',
+  'email': 'email',
+  'phone': 'phone',
+  'select': 'select',
+  'multiselect': 'multiselect',
+};
+
+/**
+ * 将 schema 中的类型字符串映射为 FieldType
+ */
+const mapSchemaType = (schemaType: string): FieldType => {
+  return schemaTypeMapping[schemaType] || 'string';
+};
+
+/**
+ * 根据字段类型补全默认配置
+ */
+const applyFieldDefaults = (field: Partial<Field>) => {
+  if (field.type === 'number') {
+    if (field.min === undefined) field.min = 0;
+    if (field.max === undefined) field.max = 100;
+  } else if (field.type === 'string') {
+    if (field.length === undefined) field.length = 10;
+  } else if (field.type === 'select' || field.type === 'multiselect') {
+    if (!field.options || field.options.length === 0) {
+      field.options = ['选项1', '选项2', '选项3'];
+    }
+  }
+};
+
+/**
+ * 解析数组格式中的单个字段定义
+ */
+const parseFieldDef = (obj: Record<string, any>): Omit<Field, 'id'> | null => {
+  const fieldName = obj.name || obj.field;
+  if (!fieldName) return null;
+
+  const rawType = obj.type || 'string';
+  const fieldType = mapSchemaType(rawType);
+  const field: Omit<Field, 'id'> = {
+    name: fieldName,
+    type: fieldType,
+    enabled: obj.enabled !== false,
+  };
+
+  if (obj.min !== undefined) field.min = obj.min;
+  if (obj.max !== undefined) field.max = obj.max;
+  if (obj.length !== undefined) field.length = obj.length;
+  if (obj.options !== undefined && Array.isArray(obj.options)) field.options = obj.options;
+
+  applyFieldDefaults(field);
+  return field;
+};
+
+/**
+ * 解析 JSON Schema 格式中的单个 property
+ */
+const parseSchemaProperty = (propName: string, prop: Record<string, any>): Omit<Field, 'id'> | null => {
+  const rawType = prop.type || 'string';
+  const fieldType = mapSchemaType(rawType);
+  const field: Omit<Field, 'id'> = {
+    name: prop.title || propName,
+    type: fieldType,
+    enabled: true,
+  };
+
+  if (prop.minimum !== undefined) field.min = prop.minimum;
+  if (prop.maximum !== undefined) field.max = prop.maximum;
+  if (prop.maxLength !== undefined) field.length = prop.maxLength;
+  if (prop.enum !== undefined && Array.isArray(prop.enum)) {
+    if (field.type === 'string') {
+      field.type = 'select';
+    }
+    field.options = prop.enum;
+  }
+
+  applyFieldDefaults(field);
+  return field;
+};
+
+/**
+ * 从 JSON 文本导入 Schema 并生成字段列表
+ */
+const handleImportSchema = () => {
+  importError.value = '';
+
+  try {
+    const parsed = JSON.parse(importSchemaText.value);
+    const newFields: Omit<Field, 'id'>[] = [];
+
+    if (Array.isArray(parsed)) {
+      // 数组格式: [{ "name": "username", "type": "string" }, ...]
+      for (const item of parsed) {
+        const field = parseFieldDef(item);
+        if (field) newFields.push(field);
+      }
+    } else if (typeof parsed === 'object' && parsed !== null) {
+      // JSON Schema 格式: { "type": "object", "properties": { ... } }
+      if (parsed.type === 'object' && parsed.properties) {
+        for (const [propName, prop] of Object.entries(parsed.properties)) {
+          const field = parseSchemaProperty(propName, prop as Record<string, any>);
+          if (field) newFields.push(field);
+        }
+      } else {
+        // 简单键值格式: { "name": "string", "age": "number" }
+        for (const [key, value] of Object.entries(parsed)) {
+          if (typeof value === 'string') {
+            const fieldType = mapSchemaType(value);
+            const field: Omit<Field, 'id'> = {
+              name: key,
+              type: fieldType,
+              enabled: true,
+            };
+            applyFieldDefaults(field);
+            newFields.push(field);
+          } else if (typeof value === 'object' && value !== null) {
+            const field = parseSchemaProperty(key, value as Record<string, any>);
+            if (field) newFields.push(field);
+          }
+        }
+      }
+    }
+
+    if (newFields.length === 0) {
+      importError.value = '未能从输入中解析出有效的字段定义';
+      return;
+    }
+
+    fields.splice(0, fields.length);
+    for (const f of newFields) {
+      fields.push({ id: generateId(), ...f });
+    }
+
+    importModalVisible.value = false;
+    importSchemaText.value = '';
+    message.success(`成功导入 ${newFields.length} 个字段`);
+  } catch {
+    importError.value = 'JSON 格式不正确，请检查输入';
+  }
+};
+
 // 初始化默认字段
 onMounted(() => {
   if (fields.length === 0) {
@@ -307,11 +461,16 @@ watch([fields, generateCount], () => {
     <div class="mock-generator__section">
       <div class="mock-generator__section-header">
         <div class="mock-generator__section-title">字段配置</div>
-        <a-dropdown>
-          <a-button type="primary" size="small">
-            <template #icon><PlusOutlined /></template>
-            添加字段
+        <div class="mock-generator__section-actions">
+          <a-button size="small" @click="importModalVisible = true">
+            <template #icon><ImportOutlined /></template>
+            导入 Schema
           </a-button>
+          <a-dropdown>
+            <a-button type="primary" size="small">
+              <template #icon><PlusOutlined /></template>
+              添加字段
+            </a-button>
           <template #overlay>
             <a-menu @click="onMenuClick">
               <a-menu-item key="name">姓名</a-menu-item>
@@ -328,6 +487,7 @@ watch([fields, generateCount], () => {
           </template>
         </a-dropdown>
       </div>
+    </div>
 
       <!-- 字段列表 -->
       <div v-if="fields.length > 0" class="mock-generator__fields">
@@ -424,6 +584,40 @@ watch([fields, generateCount], () => {
       </div>
     </div>
   </div>
+
+  <!-- 导入 Schema 弹窗 -->
+  <a-modal
+    v-model:visible="importModalVisible"
+    title="导入 Schema"
+    @ok="handleImportSchema"
+    ok-text="导入"
+    cancel-text="取消"
+    :width="560"
+  >
+    <div class="schema-import__body">
+      <p class="section-label" style="margin-bottom: var(--spacing-sm);">
+        粘贴 JSON 定义，支持以下格式（支持类型：string / number / boolean / name / idCard / email / phone / select / multiselect）：
+      </p>
+      <a-tabs size="small" class="schema-import__tabs">
+        <a-tab-pane key="simple" tab="简单格式">
+          <pre class="schema-import__demo">{&#10;  "username": "name",&#10;  "age": "number",&#10;  "active": "boolean",&#10;  "email": "email"&#10;}</pre>
+        </a-tab-pane>
+        <a-tab-pane key="array" tab="数组格式">
+          <pre class="schema-import__demo">[{&#10;  "name": "username", "type": "name"&#10;},{&#10;  "name": "age", "type": "number", "min": 0, "max": 100&#10;},{&#10;  "name": "role", "type": "select",&#10;  "options": ["admin", "user"]&#10;}]</pre>
+        </a-tab-pane>
+        <a-tab-pane key="json-schema" tab="JSON Schema">
+          <pre class="schema-import__demo">{&#10;  "type": "object",&#10;  "properties": {&#10;    "username": { "type": "name" },&#10;    "age": { "type": "integer", "minimum": 0, "maximum": 120 },&#10;    "role": { "type": "string", "enum": ["admin", "user", "guest"] }&#10;  }&#10;}</pre>
+        </a-tab-pane>
+      </a-tabs>
+      <label class="section-label">Schema 定义</label>
+      <a-textarea
+        v-model:value="importSchemaText"
+        :rows="5"
+        placeholder="在此粘贴 JSON 定义…"
+      />
+      <div v-if="importError" class="schema-import__error">{{ importError }}</div>
+    </div>
+  </a-modal>
 </template>
 
 <style scoped>
@@ -456,6 +650,12 @@ watch([fields, generateCount], () => {
 
 .mock-generator__section-header .mock-generator__section-title {
   margin-bottom: 0;
+}
+
+.mock-generator__section-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .mock-generator__fields {
@@ -512,5 +712,35 @@ watch([fields, generateCount], () => {
   font-size: var(--font-size-body-sm);
   color: var(--color-text-primary);
   line-height: 1.6;
+}
+
+/* Schema 导入弹窗 */
+.schema-import__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.schema-import__tabs {
+  margin-bottom: 0;
+}
+
+.schema-import__demo {
+  margin: 0;
+  padding: var(--spacing-sm);
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-body-sm);
+  font-family: 'Courier New', monospace;
+  line-height: 1.5;
+  white-space: pre;
+  overflow-x: auto;
+  border: 1px solid var(--color-border-light);
+}
+
+.schema-import__error {
+  color: var(--ant-error-color, #ff4d4f);
+  font-size: var(--font-size-body-sm);
+  padding: var(--spacing-xs) 0;
 }
 </style>

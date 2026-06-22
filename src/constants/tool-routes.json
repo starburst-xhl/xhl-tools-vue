@@ -98,6 +98,16 @@
                 "description": "粘贴或输入显示为乱码的文本，点击「自动检测修复」自动识别编码问题并修复，支持中文 GBK/Big5、日文 Shift_JIS、韩文 EUC-KR 等常见编码乱码。自动修复不准确时可在手动修复中指定编码组合。",
                 "seoDescription": "编码乱码修复器，自动检测并修复中文GBK/Big5、日文Shift_JIS、韩文EUC-KR等编码问题。支持Latin-1互转，自动评分推荐最佳方案，本地处理不上传服务器"
               }
+            },
+            {
+              "path": "opml-viewer",
+              "component": "@/views/Tools/CodecTool/OpmlViewer.vue",
+              "meta": {
+                "icon": "ApartmentOutlined",
+                "title": "OPML 可视化",
+                "description": "粘贴 OPML 内容或上传 .opml 文件，点击「解析渲染」按钮即可将大纲结构可视化为可折叠的树形视图。支持 RSS 订阅列表和思维导图大纲的解析展示。",
+                "seoDescription": "OPML在线可视化工具，将RSS订阅列表和大纲文件解析为可交互的树形结构，支持粘贴和文件上传，本地解析不上传服务器"
+              }
             }
           ]
         },
