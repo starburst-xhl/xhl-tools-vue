@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { type RouteRecordRaw, useRoute } from "vue-router";
 import { badString } from "@/utils/string_utils.ts";
 import { GithubOutlined, EyeOutlined, UserOutlined } from "@ant-design/icons-vue";
@@ -25,6 +25,56 @@ watch(route, () => {
     currentItem.value = [name as string];
   }
 }, { immediate: true });
+
+// --- busuanzi 统计数据持久化 (sessionStorage) ---
+const BUSUANZI_PV_KEY = 'busuanzi_site_pv';
+const BUSUANZI_UV_KEY = 'busuanzi_site_uv';
+
+const sitePv = ref(sessionStorage.getItem(BUSUANZI_PV_KEY) || '0');
+const siteUv = ref(sessionStorage.getItem(BUSUANZI_UV_KEY) || '0');
+
+let observer: MutationObserver | null = null;
+
+onMounted(() => {
+  // 监听 busuanzi 脚本填充数据
+  const pvEl = document.getElementById('busuanzi_site_pv');
+  const uvEl = document.getElementById('busuanzi_site_uv');
+
+  if (pvEl && uvEl) {
+    // 初始读取（busuanzi 可能比 Vue hydration 更早执行）
+    const pvText = pvEl.textContent?.trim();
+    const uvText = uvEl.textContent?.trim();
+    if (pvText && pvText !== '0') {
+      sitePv.value = pvText;
+      sessionStorage.setItem(BUSUANZI_PV_KEY, pvText);
+    }
+    if (uvText && uvText !== '0') {
+      siteUv.value = uvText;
+      sessionStorage.setItem(BUSUANZI_UV_KEY, uvText);
+    }
+
+    // 使用 MutationObserver 监听后续变化
+    observer = new MutationObserver(() => {
+      const pv = pvEl.textContent?.trim();
+      const uv = uvEl.textContent?.trim();
+      if (pv && pv !== '0') {
+        sitePv.value = pv;
+        sessionStorage.setItem(BUSUANZI_PV_KEY, pv);
+      }
+      if (uv && uv !== '0') {
+        siteUv.value = uv;
+        sessionStorage.setItem(BUSUANZI_UV_KEY, uv);
+      }
+    });
+
+    observer.observe(pvEl, { characterData: true, subtree: true });
+    observer.observe(uvEl, { characterData: true, subtree: true });
+  }
+});
+
+onUnmounted(() => {
+  observer?.disconnect();
+});
 </script>
 
 <template>
@@ -57,13 +107,13 @@ watch(route, () => {
         <a-tooltip title="全站总访问量">
           <span class="head-bar__stat-item">
             <EyeOutlined />
-            <span id="busuanzi_site_pv">0</span>
+            <span id="busuanzi_site_pv">{{ sitePv }}</span>
           </span>
         </a-tooltip>
         <a-tooltip title="全站总访客数">
           <span class="head-bar__stat-item">
             <UserOutlined />
-            <span id="busuanzi_site_uv">0</span>
+            <span id="busuanzi_site_uv">{{ siteUv }}</span>
           </span>
         </a-tooltip>
       </div>
