@@ -11,7 +11,7 @@ import { routes } from './router'
 export const createApp = ViteSSG(
   App,
   { routes, base: '/' },
-  ({ app, router, initialState, onSSRAppRendered }) => {
+  ({ app, initialState, onSSRAppRendered }) => {
     const pinia = createPinia()
 
     // SSR：创建 antdv CSS-in-JS cache

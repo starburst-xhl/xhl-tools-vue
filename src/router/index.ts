@@ -36,6 +36,7 @@ export const routes = [
           {
             path: 'media-tool', name: 'MediaTool', meta: { title: '媒体工具' },
             children: [
+              { path: 'svg-renderer', name: 'SvgRenderer', component: () => import('@/views/Tools/MediaTool/SvgRendererTool.vue'), meta: { title: 'SVG 渲染器', icon: 'PictureOutlined', description: '粘贴 SVG 代码即可实时预览渲染效果，支持自定义修改颜色，可导出为 PNG、JPG、ICO 格式。内置 XSS 防护，安全可靠。', seoDescription: '在线SVG渲染预览工具，支持粘贴SVG代码实时预览，自定义修改颜色，导出PNG、JPG、ICO格式。内置安全过滤防止XSS攻击，本地处理无需上传' } },
               { path: 'rpgmvp-to-png', name: 'RpgmvpToPng', component: () => import('@/views/Tools/MediaTool/RpgmvpToPng.vue'), meta: { title: 'RPGMVP 转 PNG', icon: 'FileImageOutlined', description: '上传 .rpgmvp 格式的 RPG Maker MV 图片文件，点击「转换并下载」将图片转换为 PNG 格式。支持单文件转换和批量打包下载。', seoDescription: '在线RPG Maker图片格式转换工具，将MVP格式图片转换为PNG通用格式。支持单文件和批量转换，转换速度快，保留原始质量', source: { name: 'rpgmvp2png', url: 'https://github.com/DrRyanHuang/rpgmvp2png' } } },
               { path: 'color-picker', name: 'ColorPicker', component: () => import('@/views/Tools/MediaTool/ColorPickerTool.vue'), meta: { title: '颜色拾取器', icon: 'BgColorsOutlined', description: '使用颜色选择器选取颜色或输入颜色值，支持 HEX、RGB、RGBA、HSL 多种格式互转。点击任意格式卡片即可复制该格式的颜色代码。也可从预设颜色或历史记录中快速选择。', seoDescription: '在线颜色拾取和转换工具，支持HEX、RGB、RGBA、HSL等格式相互转换，一键复制颜色代码。适用于前端开发和UI设计' } },
             ]

@@ -15,6 +15,7 @@ import {
   DatabaseOutlined,
   LinkOutlined,
   WarningOutlined,
+  PictureOutlined,
 } from '@ant-design/icons-vue'
 
 /**
@@ -64,6 +65,7 @@ const iconMap: Record<string, FunctionalComponent<AntdIconProps>> = {
   DatabaseOutlined,
   LinkOutlined,
   WarningOutlined,
+  PictureOutlined,
 }
 
 /**

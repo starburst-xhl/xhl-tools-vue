@@ -18,14 +18,14 @@ describe('tool_utils', () => {
 
   describe('extractToolsFromRoutes', () => {
     it('提取叶子节点工具', () => {
-      const routes: RouteRecordRaw[] = [
+      const routes = [
         {
           path: 'base64-tool',
           name: 'Base64Tool',
           component: () => import('@/views/Tools/CodecTool/Base64Tool.vue'),
           meta: { title: 'Base64 编解码', icon: 'CodeOutlined', description: '编解码工具' },
         },
-      ]
+      ] as RouteRecordRaw[]
 
       const tools = extractToolsFromRoutes(routes)
 
@@ -41,7 +41,7 @@ describe('tool_utils', () => {
     })
 
     it('递归提取嵌套路由中的叶子工具', () => {
-      const routes: RouteRecordRaw[] = [
+      const routes = [
         {
           path: '/tools',
           name: 'Tools',
@@ -51,18 +51,18 @@ describe('tool_utils', () => {
             {
               path: 'base64-tool',
               name: 'Base64Tool',
-              component: {} as any,
+              component: {} as RouteRecordRaw['component'],
               meta: { title: 'Base64', icon: 'CodeOutlined', description: '编解码' },
             },
             {
               path: 'aes-tool',
               name: 'AesTool',
-              component: {} as any,
+              component: {} as RouteRecordRaw['component'],
               meta: { title: 'AES', icon: 'LockOutlined', description: '加密' },
             },
           ],
-        } as RouteRecordRaw,
-      ]
+        },
+      ] as RouteRecordRaw[]
 
       const tools = extractToolsFromRoutes(routes)
 
@@ -72,14 +72,14 @@ describe('tool_utils', () => {
     })
 
     it('parentPath 正确拼接', () => {
-      const routes: RouteRecordRaw[] = [
+      const routes = [
         {
           path: 'base64-tool',
           name: 'Base64Tool',
-          component: {} as any,
+          component: {} as RouteRecordRaw['component'],
           meta: { title: 'Base64', icon: 'CodeOutlined', description: '编解码' },
         },
-      ]
+      ] as RouteRecordRaw[]
 
       const tools = extractToolsFromRoutes(routes, '/tools')
 
@@ -87,67 +87,67 @@ describe('tool_utils', () => {
     })
 
     it('没有 meta 的叶子节点不会被提取', () => {
-      const routes: RouteRecordRaw[] = [
+      const routes = [
         {
           path: 'test',
           name: 'Test',
-          component: {} as any,
+          component: {} as RouteRecordRaw['component'],
           // 无 meta
         },
-      ]
+      ] as RouteRecordRaw[]
 
       const tools = extractToolsFromRoutes(routes)
       expect(tools).toHaveLength(0)
     })
 
     it('没有 component 的路由不会被当作叶子节点', () => {
-      const routes: RouteRecordRaw[] = [
+      const routes = [
         {
           path: '/tools',
           name: 'Tools',
           meta: { title: '工具' },
           redirect: '/tools/tool-home',
         },
-      ]
+      ] as RouteRecordRaw[]
 
       const tools = extractToolsFromRoutes(routes)
       expect(tools).toHaveLength(0)
     })
 
     it('默认 icon 为 AppstoreOutlined', () => {
-      const routes: RouteRecordRaw[] = [
+      const routes = [
         {
           path: 'test',
           name: 'Test',
-          component: {} as any,
+          component: {} as RouteRecordRaw['component'],
           meta: { title: 'Test', description: '测试' }, // 无 icon
         },
-      ]
+      ] as RouteRecordRaw[]
 
       const tools = extractToolsFromRoutes(routes)
       expect(tools[0].icon).toBe('AppstoreOutlined')
     })
 
     it('默认 description 为空字符串', () => {
-      const routes: RouteRecordRaw[] = [
+      const routes = [
         {
           path: 'test',
           name: 'Test',
-          component: {} as any,
+          component: {} as RouteRecordRaw['component'],
           meta: { title: 'Test', icon: 'CodeOutlined' }, // 无 description
         },
-      ]
+      ] as RouteRecordRaw[]
 
       const tools = extractToolsFromRoutes(routes)
       expect(tools[0].description).toBe('')
     })
 
     it('提取带 source 的工具', () => {
-      const routes: RouteRecordRaw[] = [
+      const routes = [
         {
           path: 'rpgmvp-to-png',
           name: 'RpgmvpToPng',
-          component: {} as any,
+          component: {} as RouteRecordRaw['component'],
           meta: {
             title: 'RPGMVP转PNG',
             icon: 'FileImageOutlined',
@@ -155,7 +155,7 @@ describe('tool_utils', () => {
             source: { name: 'rpgmvp2png', url: 'https://github.com/test' },
           },
         },
-      ]
+      ] as RouteRecordRaw[]
 
       const tools = extractToolsFromRoutes(routes)
       expect(tools[0].source).toEqual({ name: 'rpgmvp2png', url: 'https://github.com/test' })

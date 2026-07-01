@@ -236,10 +236,6 @@ function isLatin1Supplement(code: number): boolean {
   return code >= 0x0080 && code <= 0x00FF
 }
 
-function isWindows1252Ext(code: number): boolean {
-  return code >= 0x20AC && code <= 0x017E
-}
-
 function isReplacementChar(code: number): boolean {
   return code === 0xFFFD // U+FFFD replacement character
 }
@@ -261,9 +257,9 @@ function scoreResult(result: string, original: string): number {
   let kanaCount = 0
   let koreanCount = 0
   let replacementCount = 0
-  let asciiCount = 0
   let latin1Count = 0
   let printAsciiCount = 0
+  let asciiCount = 0
 
   for (const char of result) {
     const cp = char.charCodeAt(0)

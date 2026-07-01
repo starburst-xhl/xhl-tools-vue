@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onMounted, reactive, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {message} from "ant-design-vue";
 import {copyToClipboard} from "@/utils/clipboard_utils";
 import {badString} from "@/utils/string_utils.ts";

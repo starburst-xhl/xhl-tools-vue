@@ -152,6 +152,16 @@
           "meta": { "title": "媒体工具" },
           "children": [
             {
+              "path": "svg-renderer",
+              "component": "@/views/Tools/MediaTool/SvgRendererTool.vue",
+              "meta": {
+                "icon": "PictureOutlined",
+                "title": "SVG 渲染器",
+                "description": "粘贴 SVG 代码即可实时预览渲染效果，支持自定义修改颜色，可导出为 PNG、JPG、ICO 格式。内置 XSS 防护，安全可靠。",
+                "seoDescription": "在线SVG渲染预览工具，支持粘贴SVG代码实时预览，自定义修改颜色，导出PNG、JPG、ICO格式。内置安全过滤防止XSS攻击，本地处理无需上传"
+              }
+            },
+            {
               "path": "rpgmvp-to-png",
               "component": "@/views/Tools/MediaTool/RpgmvpToPng.vue",
               "meta": {

@@ -217,7 +217,7 @@ const removeField = (id: string) => {
 };
 
 // 生成单个随机值
-const generateRandomValue = (field: Field): any => {
+const generateRandomValue = (field: Field): unknown => {
   switch (field.type) {
     case 'name':
       return generateChineseName();
@@ -254,10 +254,10 @@ const generateRandomValue = (field: Field): any => {
 
 // 生成JSON数据
 const generateJson = () => {
-  const dataList: Record<string, any>[] = [];
+  const dataList: Record<string, unknown>[] = [];
 
   for (let i = 0; i < generateCount.value; i++) {
-    const item: Record<string, any> = {};
+    const item: Record<string, unknown> = {};
 
     for (const field of fields) {
       if (!field.enabled) continue;
@@ -320,11 +320,11 @@ const applyFieldDefaults = (field: Partial<Field>) => {
 /**
  * 解析数组格式中的单个字段定义
  */
-const parseFieldDef = (obj: Record<string, any>): Omit<Field, 'id'> | null => {
-  const fieldName = obj.name || obj.field;
+const parseFieldDef = (obj: Record<string, unknown>): Omit<Field, 'id'> | null => {
+  const fieldName = (obj.name || obj.field) as string | undefined;
   if (!fieldName) return null;
 
-  const rawType = obj.type || 'string';
+  const rawType = (obj.type as string) || 'string';
   const fieldType = mapSchemaType(rawType);
   const field: Omit<Field, 'id'> = {
     name: fieldName,
@@ -332,10 +332,10 @@ const parseFieldDef = (obj: Record<string, any>): Omit<Field, 'id'> | null => {
     enabled: obj.enabled !== false,
   };
 
-  if (obj.min !== undefined) field.min = obj.min;
-  if (obj.max !== undefined) field.max = obj.max;
-  if (obj.length !== undefined) field.length = obj.length;
-  if (obj.options !== undefined && Array.isArray(obj.options)) field.options = obj.options;
+  if (obj.min !== undefined) field.min = obj.min as number;
+  if (obj.max !== undefined) field.max = obj.max as number;
+  if (obj.length !== undefined) field.length = obj.length as number;
+  if (obj.options !== undefined && Array.isArray(obj.options)) field.options = obj.options as string[];
 
   applyFieldDefaults(field);
   return field;
@@ -344,23 +344,23 @@ const parseFieldDef = (obj: Record<string, any>): Omit<Field, 'id'> | null => {
 /**
  * 解析 JSON Schema 格式中的单个 property
  */
-const parseSchemaProperty = (propName: string, prop: Record<string, any>): Omit<Field, 'id'> | null => {
-  const rawType = prop.type || 'string';
+const parseSchemaProperty = (propName: string, prop: Record<string, unknown>): Omit<Field, 'id'> | null => {
+  const rawType = (prop.type as string) || 'string';
   const fieldType = mapSchemaType(rawType);
   const field: Omit<Field, 'id'> = {
-    name: prop.title || propName,
+    name: (prop.title as string) || propName,
     type: fieldType,
     enabled: true,
   };
 
-  if (prop.minimum !== undefined) field.min = prop.minimum;
-  if (prop.maximum !== undefined) field.max = prop.maximum;
-  if (prop.maxLength !== undefined) field.length = prop.maxLength;
+  if (prop.minimum !== undefined) field.min = prop.minimum as number;
+  if (prop.maximum !== undefined) field.max = prop.maximum as number;
+  if (prop.maxLength !== undefined) field.length = prop.maxLength as number;
   if (prop.enum !== undefined && Array.isArray(prop.enum)) {
     if (field.type === 'string') {
       field.type = 'select';
     }
-    field.options = prop.enum;
+    field.options = prop.enum as string[];
   }
 
   applyFieldDefaults(field);
@@ -387,7 +387,7 @@ const handleImportSchema = () => {
       // JSON Schema 格式: { "type": "object", "properties": { ... } }
       if (parsed.type === 'object' && parsed.properties) {
         for (const [propName, prop] of Object.entries(parsed.properties)) {
-          const field = parseSchemaProperty(propName, prop as Record<string, any>);
+          const field = parseSchemaProperty(propName, prop as Record<string, unknown>);
           if (field) newFields.push(field);
         }
       } else {
@@ -403,7 +403,7 @@ const handleImportSchema = () => {
             applyFieldDefaults(field);
             newFields.push(field);
           } else if (typeof value === 'object' && value !== null) {
-            const field = parseSchemaProperty(key, value as Record<string, any>);
+            const field = parseSchemaProperty(key, value as Record<string, unknown>);
             if (field) newFields.push(field);
           }
         }

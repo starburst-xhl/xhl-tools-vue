@@ -12,8 +12,7 @@ const parsed = ref(false)
 const parseError = ref('')
 const isLoading = ref(false)
 
-/* eslint-disable vue/no-unknown-elements-selector --
-    querySelector 操作在 XML(OPML) DOM 上，非 Vue 模板，
+/* querySelector 操作在 XML(OPML) DOM 上，非 Vue 模板，
     outline/parsererror/opml/dateCreated 等均为 OPML 规范定义的 XML 元素 */
 // 递归解析 outline 元素
 const parseOutline = (element: Element): OpmlNode => {
@@ -70,7 +69,7 @@ const parseOpml = (xmlString: string) => {
   const rootOutlines = body.querySelectorAll(':scope > outline')
   outlineTree.value = Array.from(rootOutlines).map(parseOutline)
 }
-/* eslint-enable vue/no-unknown-elements-selector */
+
 
 // 提交处理
 const handleProcess = async () => {

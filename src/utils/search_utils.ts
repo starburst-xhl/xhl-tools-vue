@@ -1,5 +1,3 @@
-import Fuse from "fuse.js";
-
 export interface SearchInfoItem<T> {
   title: string;
   key: T;

@@ -82,9 +82,6 @@ export default defineConfig({
       '@ant-design/icons-svg',
       'crypto-js',
       'jsqr',
-      'browser-image-compression',
-      '@ffmpeg/ffmpeg',
-      '@ffmpeg/util',
     ],
   },
 })

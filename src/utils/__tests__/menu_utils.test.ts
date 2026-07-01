@@ -14,14 +14,14 @@ interface MenuResult {
 describe('menu_utils', () => {
   describe('routeToMenuItems', () => {
     it('将简单路由转换为菜单项', () => {
-      const routes: RouteRecordRaw[] = [
+      const routes = [
         {
           path: '/home',
           name: 'Home',
           meta: { title: '首页' },
-          component: {} as any,
+          component: {} as RouteRecordRaw['component'],
         },
-      ]
+      ] as RouteRecordRaw[]
 
       const result = routeToMenuItems(routes) as MenuResult[]
 
@@ -33,28 +33,28 @@ describe('menu_utils', () => {
     })
 
     it('将嵌套路由转换为带子菜单的菜单项', () => {
-      const routes: RouteRecordRaw[] = [
+      const routes = [
         {
           path: '/tools',
           name: 'Tools',
           meta: { title: '工具' },
-          component: {} as any,
+          component: {} as RouteRecordRaw['component'],
           children: [
             {
               path: 'base64',
               name: 'Base64',
               meta: { title: 'Base64编解码' },
-              component: {} as any,
+              component: {} as RouteRecordRaw['component'],
             },
             {
               path: 'aes',
               name: 'AES',
               meta: { title: 'AES加密' },
-              component: {} as any,
+              component: {} as RouteRecordRaw['component'],
             },
           ],
         },
-      ]
+      ] as RouteRecordRaw[]
 
       const result = routeToMenuItems(routes) as MenuResult[]
 
@@ -66,13 +66,13 @@ describe('menu_utils', () => {
     })
 
     it('无 meta 的路由，title 和 label 为 undefined', () => {
-      const routes: RouteRecordRaw[] = [
+      const routes = [
         {
           path: '/test',
           name: 'Test',
-          component: {} as any,
+          component: {} as RouteRecordRaw['component'],
         },
-      ]
+      ] as RouteRecordRaw[]
 
       const result = routeToMenuItems(routes) as MenuResult[]
 
@@ -86,30 +86,30 @@ describe('menu_utils', () => {
     })
 
     it('多层嵌套路由递归转换', () => {
-      const routes: RouteRecordRaw[] = [
+      const routes = [
         {
           path: '/parent',
           name: 'Parent',
           meta: { title: '父级' },
-          component: {} as any,
+          component: {} as RouteRecordRaw['component'],
           children: [
             {
               path: 'child',
               name: 'Child',
               meta: { title: '子级' },
-              component: {} as any,
+              component: {} as RouteRecordRaw['component'],
               children: [
                 {
                   path: 'grandchild',
                   name: 'GrandChild',
                   meta: { title: '孙级' },
-                  component: {} as any,
+                  component: {} as RouteRecordRaw['component'],
                 },
               ],
             },
           ],
         },
-      ]
+      ] as RouteRecordRaw[]
 
       const result = routeToMenuItems(routes) as MenuResult[]
 

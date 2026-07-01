@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { badString } from '@/utils/string_utils'
 
 // 密码生成器核心逻辑测试

@@ -16,7 +16,6 @@ import {
   getSupportedEncodings,
   isTextGarbled,
   type FixCandidate,
-  type FixPath,
 } from "@/utils/encoding_utils"
 
 // ===== 状态 =====
@@ -310,7 +309,7 @@ const toggleCandidate = (index: number) => {
         <div class="scenario-list">
           <div class="scenario-item">
             <span class="scenario-item__encoding">Latin-1 &#8594; UTF-8</span>
-            <span class="scenario-item__desc">文本显示为类似 "ä¸­æ" 的拉丁字母乱码</span>
+            <span class="scenario-item__desc">文本显示为类似乱码的拉丁字母组合</span>
           </div>
           <div class="scenario-item">
             <span class="scenario-item__encoding">GBK &#8594; UTF-8</span>
