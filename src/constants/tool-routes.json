@@ -144,6 +144,16 @@
                 "description": "点击「掷骰子」按钮模拟投掷 1-6 面骰子，仿真模式下显示骰子动画效果，数字模式下直接显示结果。投掷记录会自动保存，方便查看历史。",
                 "seoDescription": "免费在线骰子模拟器，支持1-6面骰子仿真投掷，界面精美动画流畅，提供投掷记录功能。适用于桌游、游戏等需要随机数的场景"
               }
+            },
+            {
+              "path": "speed-visualizer",
+              "component": "@/views/Tools/NumberTool/SpeedVisualizerTool.vue",
+              "meta": {
+                "icon": "ThunderboltOutlined",
+                "title": "转速可视化",
+                "description": "输入转速值并选择 RPM、RPS 或 rad/s 单位，数值自动换算，实时预览旋转动画效果。支持默认轮子和自定义 SVG 两种展示模式，可随时暂停/播放动画。",
+                "seoDescription": "在线转速可视化工具，支持RPM、RPS和rad/s三种单位切换，数值自动换算。提供默认轮子和自定义SVG图形两种旋转展示模式，实时动画预览，可暂停播放"
+              }
             }
           ]
         },

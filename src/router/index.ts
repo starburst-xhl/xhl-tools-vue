@@ -31,6 +31,7 @@ export const routes = [
               { path: 'stopwatch-tool', name: 'StopwatchTool', component: () => import('@/views/Tools/NumberTool/StopwatchTool.vue'), meta: { title: '秒表计时器', icon: 'ClockCircleOutlined', description: '点击「启动」开始计时，「停止」暂停计时，「重置」清零。计时过程中可点击「掐表」记录分段时间，所有记录会显示在列表中。计时精度达毫秒级别。', seoDescription: '免费在线秒表计时器，毫秒精度，支持开始、暂停、重置、分段计时。适用于运动计时、考试计时、演讲计时等场景' } },
               { path: 'password-generator', name: 'PasswordGenerator', component: () => import('@/views/Tools/NumberTool/PasswordGenerator.vue'), meta: { title: '密码生成器', icon: 'KeyOutlined', description: '设置密码长度（1-60位），勾选是否包含大写字母、小写字母、数字、特殊字符，点击「重新生成」获取新密码，点击「复制密码」将结果复制到剪贴板。', seoDescription: '在线随机密码生成器，支持自定义长度和字符类型，生成1-60位安全密码。包含大小写字母、数字、特殊字符可选，一键复制简单快捷' } },
               { path: 'dice-tool', name: 'DiceTool', component: () => import('@/views/Tools/NumberTool/DiceTool.vue'), meta: { title: '骰子模拟器', icon: 'TableOutlined', description: '点击「掷骰子」按钮模拟投掷 1-6 面骰子，仿真模式下显示骰子动画效果，数字模式下直接显示结果。投掷记录会自动保存，方便查看历史。', seoDescription: '免费在线骰子模拟器，支持1-6面骰子仿真投掷，界面精美动画流畅，提供投掷记录功能。适用于桌游、游戏等需要随机数的场景' } },
+              { path: 'speed-visualizer', name: 'SpeedVisualizer', component: () => import('@/views/Tools/NumberTool/SpeedVisualizerTool.vue'), meta: { title: '转速可视化', icon: 'ThunderboltOutlined', description: '输入转速值并选择 RPM、RPS 或 rad/s 单位，数值自动换算，实时预览旋转动画效果。支持默认轮子和自定义 SVG 两种展示模式，可随时暂停/播放动画。', seoDescription: '在线转速可视化工具，支持RPM、RPS和rad/s三种单位切换，数值自动换算。提供默认轮子和自定义SVG图形两种旋转展示模式，实时动画预览，可暂停播放' } },
             ]
           },
           {
