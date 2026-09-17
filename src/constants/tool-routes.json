@@ -154,6 +154,16 @@
                 "description": "输入转速值并选择 RPM、RPS 或 rad/s 单位，数值自动换算，实时预览旋转动画效果。支持默认轮子和自定义 SVG 两种展示模式，可随时暂停/播放动画。",
                 "seoDescription": "在线转速可视化工具，支持RPM、RPS和rad/s三种单位切换，数值自动换算。提供默认轮子和自定义SVG图形两种旋转展示模式，实时动画预览，可暂停播放"
               }
+            },
+            {
+              "path": "download-speed-calculator",
+              "component": "@/views/Tools/NumberTool/DownloadSpeedCalculator.vue",
+              "meta": {
+                "icon": "DownloadOutlined",
+                "title": "下载速度计算器",
+                "description": "选择计算目标（下载时间 / 文件容量 / 下载速度），填写另外两个参数即可自动算出结果。下载时间支持时、分、秒分别输入，文件容量支持 B 到 TB，下载速度支持 Mbps、MB/s 等带宽与下载工具常用单位。",
+                "seoDescription": "在线下载速度计算器，根据文件容量、下载速度和下载时间三个参数自动换算，支持Mbps与MB/s单位互转，时间可按时分秒输入，快速估算文件下载耗时和所需带宽"
+              }
             }
           ]
         },
