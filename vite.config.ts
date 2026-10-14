@@ -53,11 +53,11 @@ export default defineConfig({
       let result = renderedHTML
 
       // SSG 构建会丢失 index.html 模板中的 Content-Security-Policy，
-      // 因此需在 onPageRendered 中重新注入 busuanzi CDN 白名单
-      if (result.indexOf('https://cdn.busuanzi.cc') === -1) {
+      // 因此需在 onPageRendered 中重新注入 Vercount CDN 白名单
+      if (result.indexOf('https://events.vercount.one') === -1) {
         result = result.replace(
           "script-src 'self' 'unsafe-inline'",
-          "script-src 'self' 'unsafe-inline' https://cdn.busuanzi.cc"
+          "script-src 'self' 'unsafe-inline' https://events.vercount.one"
         )
       }
 

@@ -26,16 +26,16 @@ watch(route, () => {
   }
 }, { immediate: true });
 
-// --- busuanzi 统计数据持久化 (sessionStorage) ---
+// --- Vercount 统计数据持久化 (sessionStorage) ---
 // 数据由 index.html 内联脚本在 Vue hydration 之前/之后写入 sessionStorage，
-// 并通过自定义事件 busuanzi-updated 通知 Vue 更新
-const BUSUANZI_PV_KEY = 'busuanzi_site_pv';
-const BUSUANZI_UV_KEY = 'busuanzi_site_uv';
+// 并通过自定义事件 vercount-updated 通知 Vue 更新
+const VERCOUNT_PV_KEY = 'vercount_site_pv';
+const VERCOUNT_UV_KEY = 'vercount_site_uv';
 
-const sitePv = ref((typeof sessionStorage !== 'undefined' && sessionStorage.getItem(BUSUANZI_PV_KEY)) || '0');
-const siteUv = ref((typeof sessionStorage !== 'undefined' && sessionStorage.getItem(BUSUANZI_UV_KEY)) || '0');
+const sitePv = ref((typeof sessionStorage !== 'undefined' && sessionStorage.getItem(VERCOUNT_PV_KEY)) || '0');
+const siteUv = ref((typeof sessionStorage !== 'undefined' && sessionStorage.getItem(VERCOUNT_UV_KEY)) || '0');
 
-function onBusuanziUpdated(e: CustomEvent) {
+function onVercountUpdated(e: CustomEvent) {
   const { pv, uv } = e.detail || {};
   // 注意："0" 在 JS 中是 truthy 字符串，必须显式排除
   if (pv && pv !== '0') sitePv.value = pv;
@@ -43,11 +43,11 @@ function onBusuanziUpdated(e: CustomEvent) {
 }
 
 onMounted(() => {
-  window.addEventListener('busuanzi-updated', onBusuanziUpdated as EventListener);
+  window.addEventListener('vercount-updated', onVercountUpdated as EventListener);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('busuanzi-updated', onBusuanziUpdated as EventListener);
+  window.removeEventListener('vercount-updated', onVercountUpdated as EventListener);
 });
 </script>
 
@@ -81,13 +81,13 @@ onUnmounted(() => {
         <a-tooltip title="全站总访问量">
           <span class="head-bar__stat-item">
             <EyeOutlined />
-            <span id="busuanzi_site_pv">{{ sitePv }}</span>
+            <span id="vercount_value_site_pv">{{ sitePv }}</span>
           </span>
         </a-tooltip>
         <a-tooltip title="全站总访客数">
           <span class="head-bar__stat-item">
             <UserOutlined />
-            <span id="busuanzi_site_uv">{{ siteUv }}</span>
+            <span id="vercount_value_site_uv">{{ siteUv }}</span>
           </span>
         </a-tooltip>
       </div>
