@@ -108,6 +108,16 @@
                 "description": "粘贴 OPML 内容或上传 .opml 文件，点击「解析渲染」按钮即可将大纲结构可视化为可折叠的树形视图。支持 RSS 订阅列表和思维导图大纲的解析展示。",
                 "seoDescription": "OPML在线可视化工具，将RSS订阅列表和大纲文件解析为可交互的树形结构，支持粘贴和文件上传，本地解析不上传服务器"
               }
+            },
+            {
+              "path": "datetime-converter",
+              "component": "@/views/Tools/CodecTool/DateTimeConverterTool.vue",
+              "meta": {
+                "icon": "FieldTimeOutlined",
+                "title": "日期时间转换",
+                "description": "在输入框中输入 Unix 时间戳（秒或毫秒）或日期时间字符串，工具会自动识别并实时转换为多种格式，包括本地时间、UTC 时间、ISO 8601、星期和时区，点击结果卡片即可复制。",
+                "seoDescription": "日期时间转换工具，支持Unix时间戳与日期时间互转，自动识别秒和毫秒，实时展示本地时间、UTC时间、ISO 8601及星期时区，一键复制，本地处理不上传服务器"
+              }
             }
           ]
         },
