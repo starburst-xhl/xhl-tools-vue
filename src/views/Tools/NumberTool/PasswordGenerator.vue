@@ -2,11 +2,12 @@
 import {onMounted, reactive, ref, watch} from "vue";
 import {message} from "ant-design-vue";
 import {copyToClipboard} from "@/utils/clipboard_utils";
-import {badString} from "@/utils/string_utils.ts";
 import {CopyOutlined, RedoOutlined} from "@ant-design/icons-vue";
 
 // 预设的特殊字符集(完整集合)
 const PRESET_SYMBOLS = '!@#$%^&*()_+{}:"<>?|[];\',./';
+
+type TypeKey = 'uppercase' | 'lowercase' | 'numbers' | 'symbols';
 
 const form = reactive({
   passwordLength: 12,
@@ -14,7 +15,52 @@ const form = reactive({
   includeLowercase: true,
   includeNumbers: true,
   includeSymbols: true,
+  // 各字符类型在生成时的权重（相对值）
+  weights: {
+    uppercase: 1,
+    lowercase: 1,
+    numbers: 1,
+    symbols: 1,
+  } as Record<TypeKey, number>,
 });
+
+const TYPE_OPTIONS: {
+  key: TypeKey;
+  label: string;
+  enabledKey: 'includeUppercase' | 'includeLowercase' | 'includeNumbers' | 'includeSymbols';
+}[] = [
+  {key: 'uppercase', label: '大写字母', enabledKey: 'includeUppercase'},
+  {key: 'lowercase', label: '小写字母', enabledKey: 'includeLowercase'},
+  {key: 'numbers', label: '数字', enabledKey: 'includeNumbers'},
+  {key: 'symbols', label: '特殊字符', enabledKey: 'includeSymbols'},
+];
+
+// 数字输入框的本地值：仅在失焦后写回 form 并重新生成密码
+const lengthInput = ref<number | null>(form.passwordLength);
+const weightInputs = reactive<Record<TypeKey, number | null>>({
+  uppercase: 1,
+  lowercase: 1,
+  numbers: 1,
+  symbols: 1,
+});
+
+const commitLength = () => {
+  const value = Math.floor(Number(lengthInput.value));
+  if (!Number.isFinite(value) || value < 1) {
+    lengthInput.value = form.passwordLength;
+    return;
+  }
+  form.passwordLength = value;
+};
+
+const commitWeight = (key: TypeKey) => {
+  const value = Math.floor(Number(weightInputs[key]));
+  if (!Number.isFinite(value) || value < 1) {
+    weightInputs[key] = form.weights[key];
+    return;
+  }
+  form.weights[key] = value;
+};
 
 // 用户选择的特殊字符集(初始包含所有预设字符)
 const selectedSymbols = ref<string[]>(PRESET_SYMBOLS.split(''));
@@ -53,24 +99,47 @@ const generatePassword = () => {
   const lowercase = 'abcdefghijklmnopqrstuvwxyz';
   const numbers = '0123456789';
   const symbols = selectedSymbols.value.join('');
-  let characters = '';
-  let gen_password = '';
-  if (form.includeUppercase) characters += uppercase;
-  if (form.includeLowercase) characters += lowercase;
-  if (form.includeNumbers) characters += numbers;
-  if (form.includeSymbols && symbols) characters += symbols;
-  if (badString(characters)) {
-    message.error('请至少选择一种字符类型');
-    return;
-  }
   if (form.includeSymbols && !symbols) {
     message.error('请至少选择一个特殊字符');
     return;
   }
+  // 按字符类型分组：生成时按权重选中一种类型，再从该类型中随机取字符，
+  // 避免字符多的类型（如特殊字符）占比过高
+  const weightedCharsets: { charset: string; weight: number }[] = [];
+  let gen_password = '';
+  if (form.includeUppercase) weightedCharsets.push({charset: uppercase, weight: form.weights.uppercase});
+  if (form.includeLowercase) weightedCharsets.push({charset: lowercase, weight: form.weights.lowercase});
+  if (form.includeNumbers) weightedCharsets.push({charset: numbers, weight: form.weights.numbers});
+  if (form.includeSymbols && symbols) weightedCharsets.push({charset: symbols, weight: form.weights.symbols});
+  if (weightedCharsets.length === 0) {
+    message.error('请至少选择一种字符类型');
+    return;
+  }
+  // 密码长度为输入框被清空时可能为 null，需先校验
+  const length = Math.floor(Number(form.passwordLength));
+  if (!Number.isFinite(length) || length <= 0) {
+    message.error('请输入有效的密码长度');
+    return;
+  }
+  // 所需字符类型数量，长度不足时条件永远无法满足，会死循环
+  if (length < weightedCharsets.length) {
+    message.error(`密码长度至少为 ${weightedCharsets.length} 位才能包含所选的字符类型`);
+    return;
+  }
+  const totalWeight = weightedCharsets.reduce((sum, item) => sum + item.weight, 0);
+  const pickCharset = () => {
+    let random = Math.random() * totalWeight;
+    for (const item of weightedCharsets) {
+      if (random < item.weight) return item.charset;
+      random -= item.weight;
+    }
+    return weightedCharsets[weightedCharsets.length - 1].charset;
+  };
   while (true) {
     gen_password = '';
-    for (let i = 0; i < form.passwordLength; i++) {
-      gen_password += characters.charAt(Math.floor(Math.random() * characters.length));
+    for (let i = 0; i < length; i++) {
+      const charset = pickCharset();
+      gen_password += charset.charAt(Math.floor(Math.random() * charset.length));
     }
     if (form.includeUppercase && !/[A-Z]/.test(gen_password)) continue;
     if (form.includeLowercase && !/[a-z]/.test(gen_password)) continue;
@@ -105,19 +174,29 @@ onMounted(() => {
   <div>
     <a-form :model="form">
       <a-form-item label="密码长度">
-        <a-input-number v-model:value="form.passwordLength" :min="1" :max="60"/>
+        <a-input-number
+          v-model:value="lengthInput"
+          :min="1"
+          :max="60"
+          @blur="commitLength"
+          @press-enter="commitLength"
+        />
       </a-form-item>
-      <a-form-item label="包含大写字母">
-        <a-switch v-model:checked="form.includeUppercase"/>
-      </a-form-item>
-      <a-form-item label="包含小写字母">
-        <a-switch v-model:checked="form.includeLowercase"/>
-      </a-form-item>
-      <a-form-item label="包含数字">
-        <a-switch v-model:checked="form.includeNumbers"/>
-      </a-form-item>
-      <a-form-item label="包含特殊字符">
-        <a-switch v-model:checked="form.includeSymbols"/>
+      <a-form-item v-for="option in TYPE_OPTIONS" :key="option.key" :label="`包含${option.label}`">
+        <div class="type-control">
+          <a-switch v-model:checked="form[option.enabledKey]"/>
+          <span class="type-control__label">权重</span>
+          <a-input-number
+            v-model:value="weightInputs[option.key]"
+            :min="1"
+            :max="100"
+            :disabled="!form[option.enabledKey]"
+            size="small"
+            class="type-control__weight"
+            @blur="commitWeight(option.key)"
+            @press-enter="commitWeight(option.key)"
+          />
+        </div>
       </a-form-item>
       <a-form-item v-if="form.includeSymbols" label="特殊字符集">
         <div class="symbol-selector">
@@ -185,6 +264,21 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   gap: 16px;
+}
+
+.type-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.type-control__label {
+  font-size: var(--font-size-caption-sm);
+  color: var(--color-text-tertiary);
+}
+
+.type-control__weight {
+  width: 72px;
 }
 
 .symbol-selector {
